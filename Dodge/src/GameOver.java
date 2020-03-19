@@ -5,30 +5,30 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class GameOver extends JFrame{
-	
+
 	private ImageIcon gameoverimage;
-	
+
 	public GameOver() {
-		
+
 		setLayout(null);
-		setBounds(121,450,1329,193);			// ÀÌ¹ÌÁö »çÀÌÁî¸¸Å­
-		setAlwaysOnTop(true);					// °è¼Ó À§¿¡ ¶ß°ÔÇÑ´Ù.
+		setBounds(121,450,1329,193);			// ì´ë¯¸ì§€ ì‚¬ì´ì¦ˆë§Œí¼
+		setAlwaysOnTop(true);					// ê³„ì† ìœ„ì— ëœ¨ê²Œí•œë‹¤.
 		gameoverimage = new ImageIcon("src/File/GameOver.png");
-		JPanel panel = new JPanel() {			// ÆĞ³Î¿¡ ¹Ù·Î ±×¸°´Ù.
+		JPanel panel = new JPanel() {			// íŒ¨ë„ì— ë°”ë¡œ ê·¸ë¦°ë‹¤.
 			public void paintComponent(Graphics g) {
-				
+
 				g.drawImage(gameoverimage.getImage(), 0, 0, null);
 				setOpaque(false);
 				super.paintComponent(g);
 			}
 		};
-		
+
 		panel.setLayout(null);
 		panel.setSize(1329,193);
 		add(panel);
-		
+
 		setUndecorated(true);
 		setVisible(true);
-		
+
 	}
 }

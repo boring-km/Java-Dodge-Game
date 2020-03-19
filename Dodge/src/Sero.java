@@ -5,7 +5,7 @@ public class Sero extends Ball{
 	private int x;
 	private int y;
 	
-	private int Speed = 3;
+	private int Speed = 1;
 	
 	
 	public int getX() {

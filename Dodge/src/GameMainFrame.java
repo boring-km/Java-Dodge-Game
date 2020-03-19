@@ -10,166 +10,166 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 public class GameMainFrame extends JPanel implements Runnable, KeyListener{
-	
-	private BufferedImage image = null;		// È­¸é ÇÁ·¹ÀÓ ÀüÃ¼ ÀÌ¹ÌÁö¸¦ ´ãÀ» °Í
+
+	private BufferedImage image = null;		// í™”ë©´ í”„ë ˆì„ ì „ì²´ ì´ë¯¸ì§€ë¥¼ ë‹´ì„ ê²ƒ
 	private boolean left = false, right = false, up = false, down = false;
 
-	private static final int WIDTH = 1500; 			// ÀüÃ¼ Æø
-	private static final int HEIGHT = 800; 			// ÀüÃ¼ ³ôÀÌ
-	private int x = 750, y = 400;			// ¿òÁ÷ÀÏ ±¸Ã¼ ÃÊ±â À§Ä¡(±¸Ã¼ ÁÂÇ¥)
-	private final int SIZE = 20;					// ±¸Ã¼ »çÀÌÁî
-	private int PlayerSpeed = 4;				// ÇÃ·¹ÀÌ¾î ¼Óµµ
-	private int life = 3;						// ÇÃ·¹ÀÌ¾î ¸ñ¼û 3°³
-	private final int SPACEBALL = 150;					// ¿ìÁÖ¹è°æ ±¸Ã¼ ¼ö
+	private static final int WIDTH = 1500; 			// ì „ì²´ í­
+	private static final int HEIGHT = 800; 			// ì „ì²´ ë†’ì´
+	private int x = 750, y = 400;			// ì›€ì§ì¼ êµ¬ì²´ ì´ˆê¸° ìœ„ì¹˜(êµ¬ì²´ ì¢Œí‘œ)
+	private final int SIZE = 20;					// êµ¬ì²´ ì‚¬ì´ì¦ˆ
+	private int PlayerSpeed = 4;				// í”Œë ˆì´ì–´ ì†ë„
+	private int life = 8;						// í”Œë ˆì´ì–´ ëª©ìˆ¨ 8ê°œ
+	private final int SPACEBALL = 120;					// ìš°ì£¼ë°°ê²½ êµ¬ì²´ ìˆ˜
 	private final int SPACEBALLSIZE = 3;
-	
+
 	private ImageIcon heart;
 	private ImageIcon showlife;
-	
-	protected boolean gameisover = false;				// °ÔÀÓ¿À¹ö Ã¢À» ÇÑ¹ø¸¸ ¸¸µé±â À§ÇÑ º¯¼ö¸¦ ÇÏ³ª »ı¼º
+
+	protected boolean gameisover = false;				// ê²Œì„ì˜¤ë²„ ì°½ì„ í•œë²ˆë§Œ ë§Œë“¤ê¸° ìœ„í•œ ë³€ìˆ˜ë¥¼ í•˜ë‚˜ ìƒì„±
 	private int stagecounting = 0;
-	private int ball_count = 0;						// ¼¼·Î·Î ³ª¿À´Â ±¸Ã¼ ¼ö ÅëÁ¦
-	
-	private int[] spicy = new int[4];		// ³­ÀÌµµ Á¶Àı¿ë º¯¼ö
-	
-	private ArrayList<Object> garoList = null;		// °¡·Î·Î ³ª¿À´Â ±¸Ã¼ ¸®½ºÆ®
-	private ArrayList<Object> garo2List = null;		// °¡·Î·Î ³ª¿À´Â ±¸Ã¼ ¸®½ºÆ®
-	private ArrayList<Object> spaceList = null;		// °¡·Î·Î ³ª¿À´Â ¿ìÁÖ ¹è°æ ¸®½ºÆ®
-	private ArrayList<Object> seroList = null;		// ¼¼·Î·Î ³ª¿À´Â ±¸Ã¼ ¸®½ºÆ®
+	private int ball_count = 0;						// ì„¸ë¡œë¡œ ë‚˜ì˜¤ëŠ” êµ¬ì²´ ìˆ˜ í†µì œ
+
+	private int[] spicy = new int[4];		// ë‚œì´ë„ ì¡°ì ˆìš© ë³€ìˆ˜
+
+	private ArrayList<Object> garoList = null;		// ê°€ë¡œë¡œ ë‚˜ì˜¤ëŠ” êµ¬ì²´ ë¦¬ìŠ¤íŠ¸
+	private ArrayList<Object> garo2List = null;		// ê°€ë¡œë¡œ ë‚˜ì˜¤ëŠ” êµ¬ì²´ ë¦¬ìŠ¤íŠ¸
+	private ArrayList<Object> spaceList = null;		// ê°€ë¡œë¡œ ë‚˜ì˜¤ëŠ” ìš°ì£¼ ë°°ê²½ ë¦¬ìŠ¤íŠ¸
+	private ArrayList<Object> seroList = null;		// ì„¸ë¡œë¡œ ë‚˜ì˜¤ëŠ” êµ¬ì²´ ë¦¬ìŠ¤íŠ¸
 	private ArrayList<Object> diaList = null;
-	
+
 	protected String date;
 	protected StageScoreFrame SSF = new StageScoreFrame();
-	protected GameOver gameover;				// °ÔÀÓ¿À¹ö È­¸é Ãâ·Â
-	protected Nickname nk;					// °ÔÀÓ¿À¹ö ½Ã ´Ğ³×ÀÓ ÀÔ·Â
-	
-	public GameMainFrame() {
-		
-		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);		// °¡·Î,¼¼·Î¿Í,Á¤¼öÇüÅ¸ÀÔÀÇ RGB
+	protected GameOver gameover;				// ê²Œì„ì˜¤ë²„ í™”ë©´ ì¶œë ¥
+	protected Nickname nk;					// ê²Œì„ì˜¤ë²„ ì‹œ ë‹‰ë„¤ì„ ì…ë ¥
 
-		this.setLayout(null);						// ÁÂÇ¥¸¦ ³»¸¶À½´ë·Î
-		
+	public GameMainFrame() {
+
+		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);		// ê°€ë¡œ,ì„¸ë¡œì™€,ì •ìˆ˜í˜•íƒ€ì…ì˜ RGB
+
+		this.setLayout(null);						// ì¢Œí‘œë¥¼ ë‚´ë§ˆìŒëŒ€ë¡œ
+
 		garoList = new ArrayList<Object>();
 		garo2List = new ArrayList<Object>();
 		spaceList = new ArrayList<Object>();
 		seroList = new ArrayList<Object>();
 		diaList = new ArrayList<Object>();
-		
+
 		heart = new ImageIcon("src/File/heart.png");
 		showlife = new ImageIcon("src/File/Life.png");
-		
+
 		addKeyListener(this);
-		this.requestFocus();		// ÆĞ³ÎÀº ±×³É Æ÷Ä¿½º¸¦ ¹ŞÀ»¼ö°¡ ¾ø´Ù
+		this.requestFocus();		// íŒ¨ë„ì€ ê·¸ëƒ¥ í¬ì»¤ìŠ¤ë¥¼ ë°›ì„ìˆ˜ê°€ ì—†ë‹¤
 		setFocusable(true);
-		
+
 	}
-		
+
 	@Override
-	public void run() {							// Runnable ÀÎÅÍÆäÀÌ½º¸¦ »ç¿ëÇØ¼­ ÇÊ¼öÀûÀÎ ¿À¹ö¶óÀÌµå!
+	public void run() {							// Runnable ì¸í„°í˜ì´ìŠ¤ë¥¼ ì‚¬ìš©í•´ì„œ í•„ìˆ˜ì ì¸ ì˜¤ë²„ë¼ì´ë“œ!
 
 		// TODO Auto-generated method stub
 		try {
 			while(true) {
 				Thread.sleep(8);
-				spaceCreate(); 			// ¿ìÁÖ ¹è°æ
+				spaceCreate(); 			// ìš°ì£¼ ë°°ê²½
 				losing_life();
-				
-				// ½ºÅ×ÀÌÁö 1
-			    if( ball_count > 100 && SSF.stagepoint == 1) {
-			    	
-			    	spicy[0] = 40;
-			    	
-			    	leftCreate(); rightCreate(); upCreate();
-			    	
-			    	ball_count = 0;
-			    	stagecounting = SSF.stagepoint;				// ½ºÅ×ÀÌÁö¸¦ ±â¾ïÇØÁÜ stagecounting = 1;
-			    }
-			    
-			    // ½ºÅ×ÀÌÁö°¡ ¹Ù²ğ ¶§¸¶´Ù life¸¦ ÇÏ³ª¾¿ ÁØ´Ù.
+
+				// ìŠ¤í…Œì´ì§€ 1
+				if( ball_count > 100 && SSF.stagepoint == 1) {
+
+					spicy[0] = 10;
+
+					leftCreate(); rightCreate(); upCreate();
+
+					ball_count = 0;
+					stagecounting = SSF.stagepoint;				// ìŠ¤í…Œì´ì§€ë¥¼ ê¸°ì–µí•´ì¤Œ stagecounting = 1;
+				}
+
+				// ìŠ¤í…Œì´ì§€ê°€ ë°”ë€” ë•Œë§ˆë‹¤ lifeë¥¼ í•˜ë‚˜ì”© ì¤€ë‹¤.
 				if( stagecounting < SSF.stagepoint) {
-			    	life++;
-			    	stagecounting = SSF.stagepoint;
-			    }
-			    
-			    // ½ºÅ×ÀÌÁö 2
-			    if(ball_count > 150 && SSF.stagepoint == 2) {
-			    	
-			    	spicy[0] = 40;		spicy[1] = 40;
-			    	
-			    	leftCreate(); 		rightCreate();
-			    	ball_count = 0;
-			    	stagecounting = SSF.stagepoint;
-			    }
-			    // ½ºÅ×ÀÌÁö 3
-			    if( ball_count > 250 && SSF.stagepoint == 3) {		// °÷°÷¿¡¼­ ÆÎÆÎ ÅÍÁø´Ù!!!!
-			    	
-			    	spicy[3] = 40;
-			    	
-			    	for(int i = 0; i < 12; i++)
-			    		diaCreate();
-			    	ball_count = 0;
-			    	stagecounting = SSF.stagepoint;	
-			    }
-			    // ½ºÅ×ÀÌÁö 4
-			    if( ball_count > 300 && SSF.stagepoint == 4) {
-			    	
-			    	spicy[0] = 30;
-			    	spicy[1] = 30;
-			    	
-			    	rightCreate(); 	leftCreate();
-			    	
-			    	spicy[3] = 30;
-			    	for(int i = 0; i < 5; i++)
-			    		diaCreate();
-			    	ball_count = 0;
-			    	stagecounting = SSF.stagepoint;	
-			    }
-			    // ½ºÅ×ÀÌÁö 5
-			    if( ball_count > 300 && SSF.stagepoint == 5) {
-			    	
-			    	for(int i = 0; i < 3; i++) 
-			    		spicy[i] = (i*10) + 5;
-			    	
-			    	upCreate();		rightCreate();		leftCreate();
-			    	
-			    	for(int i = 0; i < 5; i++)
-			    		diaCreate();
-			    	
-			    	ball_count = 0;
-			    	stagecounting = SSF.stagepoint;	
-			    }
-			    // ½ºÅ×ÀÌÁö 6
-			    if( ball_count > 250 && SSF.stagepoint == 6) {
-			    	
-			    	for(int i = 0; i < 3; i++) 
-			    		spicy[i] = (i*10) + 5;
-			    	
-			    	upCreate();		rightCreate();		leftCreate();
-			    	
-			    	for(int i = 0; i < 10; i++)
-			    		diaCreate();
-			    	ball_count = 0;
-			    	stagecounting = SSF.stagepoint;	
-			    }
-			    
-			    // ½ºÅ×ÀÌÁö 7 ÀÌÈÄ
-			    if( ball_count > 200 && SSF.stagepoint >= 7) {
-			    	
-			    	for(int i = 0; i < 3; i++) 
-			    		spicy[i] = (int)(Math.random() * 15) + 10;
-			    	
-			    	upCreate();		rightCreate();		leftCreate();
-			    	for(int i = 0; i < 15; i++)
-			    		diaCreate();
-			    	ball_count = 0;
-			    }
-			    	
-			    ball_count++;
-			    draw();
-			    keyControl();
-			    
+					life++;
+					stagecounting = SSF.stagepoint;
+				}
+
+				// ìŠ¤í…Œì´ì§€ 2
+				if(ball_count > 150 && SSF.stagepoint == 2) {
+
+					spicy[0] = 10;		spicy[1] = 10;
+
+					leftCreate(); 		rightCreate();
+					ball_count = 0;
+					stagecounting = SSF.stagepoint;
+				}
+				// ìŠ¤í…Œì´ì§€ 3
+				if( ball_count > 250 && SSF.stagepoint == 3) {		// ê³³ê³³ì—ì„œ íŒ¡íŒ¡ í„°ì§„ë‹¤!!!!
+
+					spicy[3] = 10;
+
+					for(int i = 0; i < 6; i++)
+						diaCreate();
+					ball_count = 0;
+					stagecounting = SSF.stagepoint;
+				}
+				// ìŠ¤í…Œì´ì§€ 4
+				if( ball_count > 300 && SSF.stagepoint == 4) {
+
+					spicy[0] = 10;
+					spicy[1] = 10;
+
+					rightCreate(); 	leftCreate();
+
+					spicy[3] = 10;
+					for(int i = 0; i < 5; i++)
+						diaCreate();
+					ball_count = 0;
+					stagecounting = SSF.stagepoint;
+				}
+				// ìŠ¤í…Œì´ì§€ 5
+				if( ball_count > 300 && SSF.stagepoint == 5) {
+
+					for(int i = 0; i < 3; i++)
+						spicy[i] = (i*10) + 5;
+
+					upCreate();		rightCreate();		leftCreate();
+
+					for(int i = 0; i < 5; i++)
+						diaCreate();
+
+					ball_count = 0;
+					stagecounting = SSF.stagepoint;
+				}
+				// ìŠ¤í…Œì´ì§€ 6
+				if( ball_count > 250 && SSF.stagepoint == 6) {
+
+					for(int i = 0; i < 3; i++)
+						spicy[i] = (i*10) + 2;
+
+					upCreate();		rightCreate();		leftCreate();
+
+					for(int i = 0; i < 10; i++)
+						diaCreate();
+					ball_count = 0;
+					stagecounting = SSF.stagepoint;
+				}
+
+				// ìŠ¤í…Œì´ì§€ 7 ì´í›„
+				if( ball_count > 200 && SSF.stagepoint >= 7) {
+
+					for(int i = 0; i < 3; i++)
+						spicy[i] = (int)(Math.random() * 15) + 4;
+
+					upCreate();		rightCreate();		leftCreate();
+					for(int i = 0; i < 15; i++)
+						diaCreate();
+					ball_count = 0;
+				}
+
+				ball_count++;
+				draw();
+				keyControl();
+
 				if(life <= 0 && gameisover == false) {
-					
+
 					Thread.interrupted();
 					gameisover = true;
 					PlayerSpeed = 0;
@@ -179,16 +179,16 @@ public class GameMainFrame extends JPanel implements Runnable, KeyListener{
 					nk = new Nickname();
 					date = new java.text.SimpleDateFormat("MM/dd_HH:mm:ss").format(new java.util.Date());
 				}
-			  
+
 			}
 		} catch(Exception e) {
-			   System.out.println("Á¤»óÀûÀÎ ¿À·ùÀÔ´Ï´Ù.");
+			System.out.println("ì •ìƒì ì¸ ì˜¤ë¥˜ì…ë‹ˆë‹¤.");
 		}
 	};
-	
-	// È­»ìÇ¥ Å°¸¦ ¹Ş¾Æ¼­ ½ÇÁ¦·Î °ªÀ» ¹Ş´Â ¸Ş¼Òµå
+
+	// í™”ì‚´í‘œ í‚¤ë¥¼ ë°›ì•„ì„œ ì‹¤ì œë¡œ ê°’ì„ ë°›ëŠ” ë©”ì†Œë“œ
 	public void keyControl() {
-		
+
 		if(0 < x) {
 			if(left) x -= PlayerSpeed;
 		}
@@ -202,48 +202,48 @@ public class GameMainFrame extends JPanel implements Runnable, KeyListener{
 			if(down) y += PlayerSpeed;
 		}
 	}
-	// ±¸Ã¼ ÀÌµ¿ ¸Ş¼Òµå
-	// °¡·Î·Î ¿ŞÂÊ¿¡¼­ ³ª¿À´Â ±¸Ã¼ »ı¼º
+	// êµ¬ì²´ ì´ë™ ë©”ì†Œë“œ
+	// ê°€ë¡œë¡œ ì™¼ìª½ì—ì„œ ë‚˜ì˜¤ëŠ” êµ¬ì²´ ìƒì„±
 	public void leftCreate() {
 		for(int i = 0; i < spicy[0]; i++) {
-			double xc = (Math.random() * 60) - 200;		// ½ÃÀÛ À§Ä¡
-			double yc = Math.random() * HEIGHT;	// ½ÃÀÛ À§Ä¡
+			double xc = (Math.random() * 60) - 200;		// ì‹œì‘ ìœ„ì¹˜
+			double yc = Math.random() * HEIGHT;	// ì‹œì‘ ìœ„ì¹˜
 			Garo garo = new Garo();
 			garo.setX((int)xc);
 			garo.setY((int)yc);
 			garoList.add(garo);
 		}
 	}
-	// °¡·Î·Î ¿À¸¥ÂÊ¿¡¼­ ³ª¿À´Â ±¸Ã¼ »ı¼º
+	// ê°€ë¡œë¡œ ì˜¤ë¥¸ìª½ì—ì„œ ë‚˜ì˜¤ëŠ” êµ¬ì²´ ìƒì„±
 	public void rightCreate() {
 		for(int i = 0; i < spicy[1]; i++) {
-			double xc = WIDTH + 200 - (Math.random() * 60);		// ½ÃÀÛ À§Ä¡
-			double yc = Math.random() * HEIGHT;	// ½ÃÀÛ À§Ä¡
+			double xc = WIDTH + 200 - (Math.random() * 60);		// ì‹œì‘ ìœ„ì¹˜
+			double yc = Math.random() * HEIGHT;	// ì‹œì‘ ìœ„ì¹˜
 			Garo2 garo2 = new Garo2();
 			garo2.setX((int)xc);
 			garo2.setY((int)yc);
 			garo2List.add(garo2);
 		}
-	}	
-	// ¼¼·Î·Î ³ª¿À´Â ±¸Ã¼ »ı¼º
+	}
+	// ì„¸ë¡œë¡œ ë‚˜ì˜¤ëŠ” êµ¬ì²´ ìƒì„±
 	public void upCreate() {
 		for(int i = 0; i < spicy[2]; i++) {
 			double xc = Math.random() * WIDTH;
-			double yc = (Math.random() * 100) - HEIGHT;	// ½ÃÀÛ À§Ä¡
+			double yc = (Math.random() * 100) - HEIGHT;	// ì‹œì‘ ìœ„ì¹˜
 			Sero sero = new Sero();
 			sero.setX((int)xc);
 			sero.setY((int)yc);
 			seroList.add(sero);
 		}
 	}
-	// ´ë°¢¼±À¸·Î ³ª¿À´Â ±¸Ã¼ »ı¼º
+	// ëŒ€ê°ì„ ìœ¼ë¡œ ë‚˜ì˜¤ëŠ” êµ¬ì²´ ìƒì„±
 	public void diaCreate() {
-		
+
 		double xdia = Math.random() * WIDTH;
 		double ydia = Math.random() * HEIGHT;
-		
+
 		for(int i = 1; i < spicy[3]; i++) {
-			
+
 			Diagonal dia = new Diagonal();
 			dia.setX((int)xdia);
 			dia.setY((int)ydia);
@@ -260,181 +260,181 @@ public class GameMainFrame extends JPanel implements Runnable, KeyListener{
 			spaceList.add(space);
 		}
 	}
-	
+
 	public void draw() {
-		
-		  Graphics g = image.getGraphics();						// ÀÌ¹ÌÁö ¹öÆÛ¸¦ »ı¼ºÇÏ¿© ÀÌ ¾È¿¡ °´Ã¼µéÀ» ±×·Á³Ö°í g2¿¡¼­ °è¼ÓÇØ¼­ ÀüÃ¼¸¦ ÀÌ¹ÌÁö·Î ±×·Á³½´Ù
-		  														// 				ÀÌ·¸°Ô ÇØ¾ß À¯Àú¸¦ ¿òÁ÷ÀÌ´Â ¸ğ¼ÇÀÌ ºÎµå·¯¿öÁ³´Ù!
-		  g.setColor(Color.BLACK);								// °ËÀº ¹ÙÅÁ
-		  g.fillRect(0, 0, WIDTH, HEIGHT);
-		  
-		  g.setColor(new Color((int)(Math.random() * 255.0), (int)(Math.random() * 255.0),
-				  (int)(Math.random() * 255.0) ));								// À¯Àú ¸ğ¾ç°ú »ö
-		  g.fillOval(x, y, SIZE, SIZE);
-		  
-		  g.setColor(Color.YELLOW);								// ¿ŞÂÊ¿¡¼­ ¿À¸¥ÂÊ
-		  for(int i = 0; i < garoList.size(); i++) {
-			  Garo garo = (Garo)garoList.get(i);				// Çüº¯È¯
-			  g.fillOval(garo.getX(), garo.getY(), garo.getRad(), garo.getRad());
-			  if(garo.getX() > WIDTH)								// È­¸é³Ñ¾î°¡¸é »èÁ¦
-				  garoList.remove(i);
-			  garo.move();
-		  }
-		  
-		  g.setColor(Color.YELLOW);								// À§¿¡¼­ ¾Æ·¡·Î
-		  for(int i = 0; i < seroList.size(); i++) {
-			  Sero sero = (Sero)seroList.get(i);				// Çüº¯È¯
-			  g.fillOval(sero.getX(), sero.getY(), sero.getRad(), sero.getRad());
-			  if(sero.getX() > WIDTH)								// // È­¸é³Ñ¾î°¡¸é »èÁ¦
-				  seroList.remove(i);
-			  sero.move();
-		  }
-		  
-		  g.setColor(Color.YELLOW);								// ¿À¸¥ÂÊ °¡·Î
-		  for(int i = 0; i < garo2List.size(); i++) {
-			  Garo2 garo2 = (Garo2)garo2List.get(i);				// Çüº¯È¯
-			  g.fillOval(garo2.getX(), garo2.getY(), garo2.getRad(), garo2.getRad());
-			  if(garo2.getX() < 0)									// È­¸é³Ñ¾î°¡¸é »èÁ¦
-				  garo2List.remove(i);
-			  garo2.move();
-		  }
-		  
-		  g.setColor(Color.YELLOW);								// ´ë°¢¼± 3->7
-		  for(int i = 0; i < diaList.size(); i++) {
-			  Diagonal dia = (Diagonal)diaList.get(i);				// Çüº¯È¯
-			  g.fillOval(dia.getX(), dia.getY(), dia.getRad(), dia.getRad());
-			  
-			  if(dia.getX() < 0) {									// È­¸é³Ñ¾î°¡¸é »èÁ¦
-				  
-				  diaList.remove(i);
-			  }
-			  dia.move();
-		  }
-		  
-		  g.setColor(Color.WHITE);								// ¿ìÁÖ°°Àº ¹è°æ
-		  for(int i = 0; i < SPACEBALL; i++) {
-			  Garo space = (Garo)spaceList.get(i);
-			  g.fillOval(space.getX(), space.getY(), SPACEBALLSIZE, SPACEBALLSIZE);				// Á¶±×¸¶ÇÑ Èò»ö Á¡À» ¸¹ÀÌ Âï¾î¼­ ¿ìÁÖÃ³·³ ¿¬Ãâ½ÃÅ³ ¿¹Á¤
-			  if(space.getX() > WIDTH)
-				  spaceList.remove(i);
-			  space.move();
-		  }
-		  
-		  g.drawImage(showlife.getImage(), 0, 690, null);		// Life :
-		  for(int i = 0; i < life; i++) {
-			  
-			  g.drawImage(heart.getImage(), 160 + 80*i, 700, null);		// ¢¾¢¾¢¾ ÇÏÆ®°¹¼ö
-		  }
-		  
-		  Graphics g2 = this.getGraphics();						// ÇÁ·¹ÀÓ ÀüÃ¼¸¦ ÀÌ¹ÌÁöÇüÅÂ·Î ±×¸°´Ù -> ¾²·¹µå¸¦ ÅëÇØ¼­ °è¼Ó ºÒ·¯¿À±â À§ÇÔ
-		  g2.drawImage(image, 0, 0, WIDTH, HEIGHT, this);
-		  
+
+		Graphics g = image.getGraphics();						// ì´ë¯¸ì§€ ë²„í¼ë¥¼ ìƒì„±í•˜ì—¬ ì´ ì•ˆì— ê°ì²´ë“¤ì„ ê·¸ë ¤ë„£ê³  g2ì—ì„œ ê³„ì†í•´ì„œ ì „ì²´ë¥¼ ì´ë¯¸ì§€ë¡œ ê·¸ë ¤ë‚¸ë‹¤
+		// 				ì´ë ‡ê²Œ í•´ì•¼ ìœ ì €ë¥¼ ì›€ì§ì´ëŠ” ëª¨ì…˜ì´ ë¶€ë“œëŸ¬ì›Œì¡Œë‹¤!
+		g.setColor(Color.BLACK);								// ê²€ì€ ë°”íƒ•
+		g.fillRect(0, 0, WIDTH, HEIGHT);
+
+		g.setColor(new Color((int)(Math.random() * 255.0), (int)(Math.random() * 255.0),
+				(int)(Math.random() * 255.0) ));								// ìœ ì € ëª¨ì–‘ê³¼ ìƒ‰
+		g.fillOval(x, y, SIZE, SIZE);
+
+		g.setColor(Color.YELLOW);								// ì™¼ìª½ì—ì„œ ì˜¤ë¥¸ìª½
+		for(int i = 0; i < garoList.size(); i++) {
+			Garo garo = (Garo)garoList.get(i);				// í˜•ë³€í™˜
+			g.fillOval(garo.getX(), garo.getY(), garo.getRad(), garo.getRad());
+			if(garo.getX() > WIDTH)								// í™”ë©´ë„˜ì–´ê°€ë©´ ì‚­ì œ
+				garoList.remove(i);
+			garo.move();
+		}
+
+		g.setColor(Color.YELLOW);								// ìœ„ì—ì„œ ì•„ë˜ë¡œ
+		for(int i = 0; i < seroList.size(); i++) {
+			Sero sero = (Sero)seroList.get(i);				// í˜•ë³€í™˜
+			g.fillOval(sero.getX(), sero.getY(), sero.getRad(), sero.getRad());
+			if(sero.getX() > WIDTH)								// // í™”ë©´ë„˜ì–´ê°€ë©´ ì‚­ì œ
+				seroList.remove(i);
+			sero.move();
+		}
+
+		g.setColor(Color.YELLOW);								// ì˜¤ë¥¸ìª½ ê°€ë¡œ
+		for(int i = 0; i < garo2List.size(); i++) {
+			Garo2 garo2 = (Garo2)garo2List.get(i);				// í˜•ë³€í™˜
+			g.fillOval(garo2.getX(), garo2.getY(), garo2.getRad(), garo2.getRad());
+			if(garo2.getX() < 0)									// í™”ë©´ë„˜ì–´ê°€ë©´ ì‚­ì œ
+				garo2List.remove(i);
+			garo2.move();
+		}
+
+		g.setColor(Color.YELLOW);								// ëŒ€ê°ì„  3->7
+		for(int i = 0; i < diaList.size(); i++) {
+			Diagonal dia = (Diagonal)diaList.get(i);				// í˜•ë³€í™˜
+			g.fillOval(dia.getX(), dia.getY(), dia.getRad(), dia.getRad());
+
+			if(dia.getX() < 0) {									// í™”ë©´ë„˜ì–´ê°€ë©´ ì‚­ì œ
+
+				diaList.remove(i);
+			}
+			dia.move();
+		}
+
+		g.setColor(Color.WHITE);								// ìš°ì£¼ê°™ì€ ë°°ê²½
+		for(int i = 0; i < SPACEBALL; i++) {
+			Garo space = (Garo)spaceList.get(i);
+			g.fillOval(space.getX(), space.getY(), SPACEBALLSIZE, SPACEBALLSIZE);				// ì¡°ê·¸ë§ˆí•œ í°ìƒ‰ ì ì„ ë§ì´ ì°ì–´ì„œ ìš°ì£¼ì²˜ëŸ¼ ì—°ì¶œì‹œí‚¬ ì˜ˆì •
+			if(space.getX() > WIDTH)
+				spaceList.remove(i);
+			space.move();
+		}
+
+		g.drawImage(showlife.getImage(), 0, 690, null);		// Life :
+		for(int i = 0; i < life; i++) {
+
+			g.drawImage(heart.getImage(), 160 + 80*i, 700, null);		// â™¥â™¥â™¥ í•˜íŠ¸ê°¯ìˆ˜
+		}
+
+		Graphics g2 = this.getGraphics();						// í”„ë ˆì„ ì „ì²´ë¥¼ ì´ë¯¸ì§€í˜•íƒœë¡œ ê·¸ë¦°ë‹¤ -> ì“°ë ˆë“œë¥¼ í†µí•´ì„œ ê³„ì† ë¶ˆëŸ¬ì˜¤ê¸° ìœ„í•¨
+		g2.drawImage(image, 0, 0, WIDTH, HEIGHT, this);
+
 	}
-	
+
 	public void keyPressed(KeyEvent e){
-		
+
 		int keycode = e.getKeyCode();
-		
+
 		switch(keycode){
-		case KeyEvent.VK_LEFT : 
-			left = true;
-			break;
-		case KeyEvent.VK_RIGHT :
-			right = true;
-			break;
-		case KeyEvent.VK_UP :
-			up = true;
-			break;
-		case KeyEvent.VK_DOWN : 
-			down = true;
-			break;
-		case KeyEvent.VK_ESCAPE :	// ESCÅ°¸¦ ´©¸£¸é Á¾·á°¡ µÉ ¼ö ÀÖµµ·Ï ÇÑ´Ù.
-			System.exit(0);
-			break;
-		case KeyEvent.VK_F11:		// Å×½ºÆ®¸¦ À§ÇØ ÇÑ¹ø¿¡ °ÔÀÓ¿À¹ö µÇ´Â »óÈ²À» Å°·Î ¼³Á¤ÇØµĞ´Ù.
-			life = 0;
-			break;
-		case KeyEvent.VK_F12:		// Å×½ºÆ®¸¦ À§ÇØ¼­ ÀÓÀÇ·Î ¸ñ¼ûÀ» ´Ã·ÁÁÖ´Â Å°¸¦ ¼³Á¤ÇØµĞ´Ù 
-			life += 1;
-			break;
-		default:
-			break;
+			case KeyEvent.VK_LEFT :
+				left = true;
+				break;
+			case KeyEvent.VK_RIGHT :
+				right = true;
+				break;
+			case KeyEvent.VK_UP :
+				up = true;
+				break;
+			case KeyEvent.VK_DOWN :
+				down = true;
+				break;
+			case KeyEvent.VK_ESCAPE :	// ESCí‚¤ë¥¼ ëˆ„ë¥´ë©´ ì¢…ë£Œê°€ ë  ìˆ˜ ìˆë„ë¡ í•œë‹¤.
+				System.exit(0);
+				break;
+			case KeyEvent.VK_F11:		// í…ŒìŠ¤íŠ¸ë¥¼ ìœ„í•´ í•œë²ˆì— ê²Œì„ì˜¤ë²„ ë˜ëŠ” ìƒí™©ì„ í‚¤ë¡œ ì„¤ì •í•´ë‘”ë‹¤.
+				life = 0;
+				break;
+			case KeyEvent.VK_F12:		// í…ŒìŠ¤íŠ¸ë¥¼ ìœ„í•´ì„œ ì„ì˜ë¡œ ëª©ìˆ¨ì„ ëŠ˜ë ¤ì£¼ëŠ” í‚¤ë¥¼ ì„¤ì •í•´ë‘”ë‹¤
+				life += 1;
+				break;
+			default:
+				break;
 		}
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
-		
+
 		int keycode = e.getKeyCode();
 		switch(keycode){
-		case KeyEvent.VK_LEFT : 
-			left = false;
-			break;
-		case KeyEvent.VK_RIGHT :
-			right = false;
-			break;
-		case KeyEvent.VK_UP :
-			up = false;
-			break;
-		case KeyEvent.VK_DOWN : 
-			down = false;
-			break;
+			case KeyEvent.VK_LEFT :
+				left = false;
+				break;
+			case KeyEvent.VK_RIGHT :
+				right = false;
+				break;
+			case KeyEvent.VK_UP :
+				up = false;
+				break;
+			case KeyEvent.VK_DOWN :
+				down = false;
+				break;
 		}
 	}
 	@Override
 	public void keyTyped(KeyEvent e) {}
-	
+
 	public void losing_life() {
-		
-		Polygon poly = null;							// ´Ù°¢Çü ±×¸®±â
-		
+
+		Polygon poly = null;							// ë‹¤ê°í˜• ê·¸ë¦¬ê¸°
+
 		for(int i = 0; i < garoList.size(); i++) {
-			
+
 			Garo ga = (Garo)garoList.get(i);
-			
-			int[] xpoint = {x, (x + ga.getRad()), (x + ga.getRad()), x};		// »ç°¢Çü 4°³ÀÇ Á¡ÀÇ xÀÇ ÁÂÇ¥¸¦ ±×·ÁÁØ´Ù.
-			int[] ypoint = {y, y, (y + ga.getRad()), (y + ga.getRad())};		// »ç°¢Çü 4°³ÀÇ Á¡ÀÇ yÀÇ ÁÂÇ¥¸¦ ±×·ÁÁØ´Ù.
+
+			int[] xpoint = {x, (x + ga.getRad()), (x + ga.getRad()), x};		// ì‚¬ê°í˜• 4ê°œì˜ ì ì˜ xì˜ ì¢Œí‘œë¥¼ ê·¸ë ¤ì¤€ë‹¤.
+			int[] ypoint = {y, y, (y + ga.getRad()), (y + ga.getRad())};		// ì‚¬ê°í˜• 4ê°œì˜ ì ì˜ yì˜ ì¢Œí‘œë¥¼ ê·¸ë ¤ì¤€ë‹¤.
 			poly = new Polygon(xpoint, ypoint, 4);
 			if(poly.intersects((double)ga.getX(), (double)ga.getY(), (double)ga.getRad(), (double)ga.getRad())) {
-				garoList.remove(i);		// ÇÃ·¹ÀÌ¾îÀÇ ´Ù°¢Çü°ú °¡·Î ±¸Ã¼µé °£ÀÇ Ãæµ¹ ½Ã
+				garoList.remove(i);		// í”Œë ˆì´ì–´ì˜ ë‹¤ê°í˜•ê³¼ ê°€ë¡œ êµ¬ì²´ë“¤ ê°„ì˜ ì¶©ëŒ ì‹œ
 				life -= 1;
 			}
 		}
-		
+
 		for(int i = 0; i < garo2List.size(); i++) {
-			
+
 			Garo2 ga2 = (Garo2)garo2List.get(i);
-			
-			int[] xpoint = {x, (x + ga2.getRad()), (x + ga2.getRad()), x};		// »ç°¢Çü 4°³ÀÇ Á¡ÀÇ xÀÇ ÁÂÇ¥¸¦ ±×·ÁÁØ´Ù.
-			int[] ypoint = {y, y, (y + ga2.getRad()), (y + ga2.getRad())};		// »ç°¢Çü 4°³ÀÇ Á¡ÀÇ yÀÇ ÁÂÇ¥¸¦ ±×·ÁÁØ´Ù.
+
+			int[] xpoint = {x, (x + ga2.getRad()), (x + ga2.getRad()), x};		// ì‚¬ê°í˜• 4ê°œì˜ ì ì˜ xì˜ ì¢Œí‘œë¥¼ ê·¸ë ¤ì¤€ë‹¤.
+			int[] ypoint = {y, y, (y + ga2.getRad()), (y + ga2.getRad())};		// ì‚¬ê°í˜• 4ê°œì˜ ì ì˜ yì˜ ì¢Œí‘œë¥¼ ê·¸ë ¤ì¤€ë‹¤.
 			poly = new Polygon(xpoint, ypoint, 4);
 			if(poly.intersects((double)ga2.getX(), (double)ga2.getY(), (double)ga2.getRad(), (double)ga2.getRad())) {
-				garo2List.remove(i);		// ÇÃ·¹ÀÌ¾îÀÇ ´Ù°¢Çü°ú °¡·Î ±¸Ã¼µé °£ÀÇ Ãæµ¹ ½Ã
+				garo2List.remove(i);		// í”Œë ˆì´ì–´ì˜ ë‹¤ê°í˜•ê³¼ ê°€ë¡œ êµ¬ì²´ë“¤ ê°„ì˜ ì¶©ëŒ ì‹œ
 				life -= 1;
 			}
 		}
-		
+
 		for(int i = 0; i < seroList.size(); i++) {
-			
+
 			Sero se = (Sero)seroList.get(i);
-			
+
 			int[] xpoint = {x, (x + SIZE), (x + SIZE), x};
 			int[] ypoint = {y, y, (y + SIZE), (y + SIZE)};
 			poly = new Polygon(xpoint, ypoint, 4);
 			if(poly.intersects((double)se.getX(), (double)se.getY(), (double)se.getRad(), (double)se.getRad())) {
-				seroList.remove(i);		// ÇÃ·¹ÀÌ¾îÀÇ ´Ù°¢Çü°ú ¼¼·Î ±¸Ã¼µé °£ÀÇ Ãæµ¹ ½Ã
+				seroList.remove(i);		// í”Œë ˆì´ì–´ì˜ ë‹¤ê°í˜•ê³¼ ì„¸ë¡œ êµ¬ì²´ë“¤ ê°„ì˜ ì¶©ëŒ ì‹œ
 				life -= 1;
 			}
 		}
-		
+
 		for(int i = 0; i < diaList.size(); i++) {
-			
+
 			Diagonal dia = (Diagonal)diaList.get(i);
-			
-			int[] xpoint = {x, (x + SIZE), (x + SIZE), x};		// »ç°¢Çü 4°³ÀÇ Á¡ÀÇ xÀÇ ÁÂÇ¥¸¦ ±×·ÁÁØ´Ù.
-			int[] ypoint = {y, y, (y + SIZE), (y + SIZE)};		// »ç°¢Çü 4°³ÀÇ Á¡ÀÇ yÀÇ ÁÂÇ¥¸¦ ±×·ÁÁØ´Ù.
+
+			int[] xpoint = {x, (x + SIZE), (x + SIZE), x};		// ì‚¬ê°í˜• 4ê°œì˜ ì ì˜ xì˜ ì¢Œí‘œë¥¼ ê·¸ë ¤ì¤€ë‹¤.
+			int[] ypoint = {y, y, (y + SIZE), (y + SIZE)};		// ì‚¬ê°í˜• 4ê°œì˜ ì ì˜ yì˜ ì¢Œí‘œë¥¼ ê·¸ë ¤ì¤€ë‹¤.
 			poly = new Polygon(xpoint, ypoint, 4);
 			if(poly.intersects((double)dia.getX(), (double)dia.getY(), (double)dia.getRad(), (double)dia.getRad())) {
-				diaList.remove(i);		// ÇÃ·¹ÀÌ¾îÀÇ ´Ù°¢Çü°ú ´ë°¢¼± ±¸Ã¼µé °£ÀÇ Ãæµ¹ ½Ã
+				diaList.remove(i);		// í”Œë ˆì´ì–´ì˜ ë‹¤ê°í˜•ê³¼ ëŒ€ê°ì„  êµ¬ì²´ë“¤ ê°„ì˜ ì¶©ëŒ ì‹œ
 				life -= 1;
 			}
 		}

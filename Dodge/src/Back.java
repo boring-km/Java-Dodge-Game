@@ -13,34 +13,34 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Back extends JFrame {
-	
+
 	private GameMainFrame game;
 	private FirstFrame FF;
 	private GameScore GS;
 	private boolean music = true;
-	
+
 	public Back() {
-		
+
 		setLayout(null);
 		setBounds(50,100,1800,850);
-		
+
 		JPanel background = new JPanel();
 		background.setBackground(Color.BLACK);
 		background.setBounds(1500,0,300,850);
-		
+
 		ImageIcon Menu = new ImageIcon("src/File/Menu1.png");
 		JButton menu = new JButton(Menu);
 		ImageIcon Pmenu = new ImageIcon("src/File/Menu3.png");
-		
+
 		menu.setBorderPainted(false);
 		menu.setPressedIcon(Pmenu);
 		menu.setRolloverIcon(Pmenu);
 		menu.setBackground(Color.BLACK);
 		menu.setBounds(1580,50,125,63);
-		
+
 		ImageIcon Menu2 = new ImageIcon("src/File/Menu1.png");
 		JButton menu2 = new JButton(Menu2);
-		
+
 		menu2.setBorderPainted(false);
 		menu2.setPressedIcon(Pmenu);
 		menu2.setRolloverIcon(Pmenu);
@@ -51,28 +51,28 @@ public class Back extends JFrame {
 		JButton mainmenu = new JButton(Main);
 		mainmenu.setBorderPainted(false);
 		mainmenu.setBounds(1580,100,100,50);
-		
+
 		ImageIcon Pause = new ImageIcon("src/File/Pause.png");
 		JButton pause = new JButton(Pause);
 		ImageIcon Pause2 = new ImageIcon("src/File/Pause2.png");
 		JButton pause2 = new JButton(Pause2);
-		
+
 		pause.setBorderPainted(false);
 		pause.setBounds(1580,150,100,50);
 		pause2.setBorderPainted(false);
 		pause2.setBounds(1580,150,150,50);
-		
+
 		ImageIcon Score = new ImageIcon("src/File/gameScore.png");
 		JButton score = new JButton(Score);
 		score.setBorderPainted(false);
 		score.setBackground(Color.BLACK);
 		score.setBounds(1580,200,126,73);
-		
+
 		ImageIcon Restart = new ImageIcon("src/File/Restart.png");
 		JButton restart = new JButton(Restart);
 		restart.setBorderPainted(false);
 		restart.setBounds(1580,250,100,50);
-		
+
 		ImageIcon Quit = new ImageIcon("src/File/Q.png");
 		JButton quit = new JButton(Quit);
 		quit.setBounds(1600,300,100,50);
@@ -82,7 +82,7 @@ public class Back extends JFrame {
 				System.exit(0);
 			}
 		});
-		// ÀÏ´Ü °¡·Á³õÀ½
+		// ì¼ë‹¨ ê°€ë ¤ë†“ìŒ
 		pause.setVisible(false);
 		pause2.setVisible(false);
 		restart.setVisible(false);
@@ -90,7 +90,7 @@ public class Back extends JFrame {
 		score.setVisible(false);
 		quit.setVisible(false);
 		menu2.setVisible(false);
-		
+
 		add(restart);
 		add(score);
 		add(pause);
@@ -100,8 +100,8 @@ public class Back extends JFrame {
 		add(menu);
 		add(quit);
 		add(background);
-		
-		// ¸Ş´º¸¦ ´©¸£¸é ¹öÆ°ÀÌ µîÀå
+
+		// ë©”ë‰´ë¥¼ ëˆ„ë¥´ë©´ ë²„íŠ¼ì´ ë“±ì¥
 		menu.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				menu.setVisible(false);
@@ -113,9 +113,9 @@ public class Back extends JFrame {
 				mainmenu.setVisible(true);
 				quit.setVisible(true);
 			}
-			
+
 		});
-		// ¸Ş´º¸¦ ´İÀ¸¸é ¹öÆ°ÀÌ °¡·ÁÁü
+		// ë©”ë‰´ë¥¼ ë‹«ìœ¼ë©´ ë²„íŠ¼ì´ ê°€ë ¤ì§
 		menu2.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				menu.setVisible(true);
@@ -128,21 +128,21 @@ public class Back extends JFrame {
 				quit.setVisible(false);
 			}
 		});
-		
+
 		game = new GameMainFrame();
-		Thread t = new Thread(game);		// °ÔÀÓÇÁ·¹ÀÓÀÇ ¾²·¹µå¸¦ »ı¼º
-		t.start();							// ¾²·¹µå ½ÃÀÛ
+		Thread t = new Thread(game);		// ê²Œì„í”„ë ˆì„ì˜ ì“°ë ˆë“œë¥¼ ìƒì„±
+		t.start();							// ì“°ë ˆë“œ ì‹œì‘
 		game.setBounds(0,50,1500,800);
-		
+
 		add(game);
 		setUndecorated(true);
 		setVisible(true);
-		
-		BackMusic introBackMusic = new BackMusic("src/File/Toru - Life.mp3", music);		// À½¾ÇÀç»ı!
+
+		BackMusic introBackMusic = new BackMusic("src/File/Toru - Life.mp3", music);		// ìŒì•…ì¬ìƒ!
 		introBackMusic.start();
-		
+
 		pause.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {	// ¸ØÃß±â
+			public void actionPerformed(ActionEvent e) {	// ë©ˆì¶”ê¸°
 				introBackMusic.suspend();
 				t.suspend();
 				game.SSF.pause = true;
@@ -150,27 +150,27 @@ public class Back extends JFrame {
 			}
 		});
 		pause2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {	// ¸ØÃã Ç®±â
+			public void actionPerformed(ActionEvent e) {	// ë©ˆì¶¤ í’€ê¸°
 				introBackMusic.resume();
 				t.resume();
 				game.addKeyListener(game);
 				game.setFocusable(true);
 				game.requestFocus();
-				if(game.gameisover == false) {				// °ÔÀÓÀÌ ¾È ³¡³µÀ» ¶§¿¡¸¸ Á¡¼ö¸¦ ¸ØÃá´Ù
+				if(game.gameisover == false) {				// ê²Œì„ì´ ì•ˆ ëë‚¬ì„ ë•Œì—ë§Œ ì ìˆ˜ë¥¼ ë©ˆì¶˜ë‹¤
 					game.SSF.resume = true;
 					game.SSF.pause = false;
 				}
 			}
 		});
 		restart.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {	// ´Ù½Ã ½ÃÀÛ ¹öÆ°
-				
+			public void actionPerformed(ActionEvent e) {	// ë‹¤ì‹œ ì‹œì‘ ë²„íŠ¼
+
 				t.stop();
 				introBackMusic.stop();
-				dispose();					// ¸Ş´ºÈ­¸é Á¾·á
-				game.SSF.dispose();				// Á¡¼öÈ­¸é Á¾·á
+				dispose();					// ë©”ë‰´í™”ë©´ ì¢…ë£Œ
+				game.SSF.dispose();				// ì ìˆ˜í™”ë©´ ì¢…ë£Œ
 				if(game.gameisover == true) {
-					game.gameover.dispose();	// °ÔÀÓ¿À¹öÈ­¸éµµ Á¾·á
+					game.gameover.dispose();	// ê²Œì„ì˜¤ë²„í™”ë©´ë„ ì¢…ë£Œ
 					game.nk.dispose();
 				}
 				Back restartgame = new Back();
@@ -183,20 +183,20 @@ public class Back extends JFrame {
 				dispose();
 				game.SSF.dispose();
 				if(game.gameisover == true) {
-					
+
 					if(game.nk.nickname != null)
 						GS = new GameScore(game.nk.nickname, game.SSF.gamepoint, game.SSF.stagepoint, game.date);
 					else if(game.nk.nickname == null && game.SSF.gamepoint == 0)
 						GS = new GameScore("", game.SSF.gamepoint, game.SSF.stagepoint, game.date);
 					else
 						GS = new GameScore("", 0, 0, null);
-					
-					game.gameover.dispose();	// °ÔÀÓ¿À¹öÈ­¸éµµ Á¾·á
+
+					game.gameover.dispose();	// ê²Œì„ì˜¤ë²„í™”ë©´ë„ ì¢…ë£Œ
 					game.nk.dispose();
-					
+
 				}else
 					GS = new GameScore("", 0, 0, null);
-				
+
 			}
 		});
 		mainmenu.addActionListener(new ActionListener() {
@@ -206,20 +206,20 @@ public class Back extends JFrame {
 				dispose();
 				game.SSF.dispose();
 				if(game.gameisover == true) {
-					game.gameover.dispose();	// °ÔÀÓ¿À¹öÈ­¸éµµ Á¾·á
+					game.gameover.dispose();	// ê²Œì„ì˜¤ë²„í™”ë©´ë„ ì¢…ë£Œ
 					game.nk.dispose();
 				}
 				FF = new FirstFrame();
 			}
 		});
-		// Ä¿¼­
-	    Toolkit tk = Toolkit.getDefaultToolkit();
-	    Cursor GameCursor = tk.createCustomCursor(tk.createImage("src/File/Yellow.png"), new Point(), null);
-	    setCursor(GameCursor);
+		// ì»¤ì„œ
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		Cursor GameCursor = tk.createCustomCursor(tk.createImage("src/File/Yellow.png"), new Point(), null);
+		setCursor(GameCursor);
 		getGlassPane().setVisible(true);
 	}
 	public void paint(Graphics g) {
-		
+
 		super.paint(g);
 		Image img = Toolkit.getDefaultToolkit().getImage("src/File/intro.png");
 		g.drawImage(img, 1550, 350, this);

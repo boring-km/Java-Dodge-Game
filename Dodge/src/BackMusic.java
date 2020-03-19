@@ -4,36 +4,36 @@ import java.io.FileInputStream;
 import javazoom.jl.player.Player;
 
 public class BackMusic extends Thread{
-	
-	private Player player;				// ¶óÀÌºê·¯¸®
-	private boolean isLoop;			
+
+	private Player player;				// ë¼ì´ë¸ŒëŸ¬ë¦¬
+	private boolean isLoop;
 	private File music;
 	private FileInputStream music_input;
 	private BufferedInputStream music_buffer;
-	
-	public BackMusic(String name, boolean isLoop) {			// ÆÄÀÏ ÀÌ¸§°ú ½ºÀ§Ä¡
-		
+
+	public BackMusic(String name, boolean isLoop) {			// íŒŒì¼ ì´ë¦„ê³¼ ìŠ¤ìœ„ì¹˜
+
 		try {
 			this.isLoop = isLoop;
-			music = new File("src/File/Toru - Life.mp3");				// À½¾ÇÆÄÀÏ -> non-copyrighted music
-			music_input = new FileInputStream(music);				// ÆÄÀÏÀ» ½ºÆ®¸²¿¡
+			music = new File("src/File/Toru - Life.mp3");				// ìŒì•…íŒŒì¼ -> non-copyrighted music
+			music_input = new FileInputStream(music);				// íŒŒì¼ì„ ìŠ¤íŠ¸ë¦¼ì—
 			music_buffer = new BufferedInputStream(music_input);
-			player = new Player(music_buffer);						// ¶óÀÌºê·¯¸® ÀÌ¿ë
+			player = new Player(music_buffer);						// ë¼ì´ë¸ŒëŸ¬ë¦¬ ì´ìš©
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void run() {
 		try {
 			do {
-				player.play();								// ÇÃ·¹ÀÌ ÇÑ´Ù!
+				player.play();								// í”Œë ˆì´ í•œë‹¤!
 				music_input = new FileInputStream(music);
 				music_buffer = new BufferedInputStream(music_input);
 				player = new Player(music_buffer);
-			} while(isLoop);				// Àç»ı ½ºÀ§Ä¡¿ªÇÒ
-			
+			} while(isLoop);				// ì¬ìƒ ìŠ¤ìœ„ì¹˜ì—­í• 
+
 		}catch(Exception e) {
 			e.printStackTrace();
 

@@ -21,58 +21,58 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class GameScore extends JFrame{
-	
-	private ImageIcon BigScore;		// ¹öÆ° ±×¸²
+
+	private ImageIcon BigScore;		// ë²„íŠ¼ ê·¸ë¦¼
 	private ImageIcon Lines;
 	private ImageIcon ScoreIntro;
-	private ImageIcon Nquit;		
+	private ImageIcon Nquit;
 	private ImageIcon Main;
 	private ImageIcon Restart;
 	private ImageIcon DeleteData;
-	
+
 	private ArrayList<Object> Score;
-	
-	private JLabel scoreLabel;	// Á¡¼öÆÇ
+
+	private JLabel scoreLabel;	// ì ìˆ˜íŒ
 	private JPanel scoreback;
-	
-	private String date;		// ºÒ·¯¿Ã µ¥ÀÌÅÍµé
+
+	private String date;		// ë¶ˆëŸ¬ì˜¬ ë°ì´í„°ë“¤
 	private String nickname;
 	private int score, stage;
-	
-	private JButton mainmenu;	// ¹öÆ°
+
+	private JButton mainmenu;	// ë²„íŠ¼
 	private JButton restart;
 	private JButton quit;
 	private JButton deleteData;
-	
-	private FirstFrame FF;		// ¹öÆ°¿¡¼­ ½ÇÇàÇØÁÙ ÇÁ·¹ÀÓ
+
+	private FirstFrame FF;		// ë²„íŠ¼ì—ì„œ ì‹¤í–‰í•´ì¤„ í”„ë ˆì„
 	private Back newgame;
-	
+
 	public GameScore(String nickname, int score, int stage, String date) {
-		
+
 		this.nickname = nickname;
 		this.score = score;
 		this.stage = stage;
 		this.date = date;
-		
+
 		scoreback = new JPanel();
-		
+
 		setLayout(null);
-		setBounds(100,100,1600,900);		// ÇÁ·¹ÀÓ »çÀÌÁî
-		
+		setBounds(100,100,1600,900);		// í”„ë ˆì„ ì‚¬ì´ì¦ˆ
+
 		BigScore = new ImageIcon("src/File/Scores.png");
 		Lines = new ImageIcon("src/File/2Lines.png");
 		ScoreIntro = new ImageIcon("src/File/scoreintro.png");
-		
-		
-		System.out.println("´Ğ³×ÀÓ : " + nickname + " ½ºÄÚ¾î : " + score + " ½ºÅ×ÀÌÁö : " + stage + " ³¯Â¥ : " + date);
-		
+
+
+		System.out.println("ë‹‰ë„¤ì„ : " + nickname + " ìŠ¤ì½”ì–´ : " + score + " ìŠ¤í…Œì´ì§€ : " + stage + " ë‚ ì§œ : " + date);
+
 		try {
 			texting();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
-			System.out.println("ÆÄÀÏÀÌ ¾ø½À´Ï´Ù!");
+			System.out.println("íŒŒì¼ì´ ì—†ìŠµë‹ˆë‹¤!");
 		}
-		
+
 		Main = new ImageIcon("src/File/Main2.png");
 		mainmenu = new JButton(Main);
 		mainmenu.setBorderPainted(false);
@@ -83,7 +83,7 @@ public class GameScore extends JFrame{
 				FF = new FirstFrame();
 			}
 		});
-		
+
 		Restart = new ImageIcon("src/File/restart2.png");
 		restart = new JButton(Restart);
 		restart.setBorderPainted(false);
@@ -94,7 +94,7 @@ public class GameScore extends JFrame{
 				newgame = new Back();
 			}
 		});
-		
+
 		Nquit = new ImageIcon("src/File/exit.png");
 		quit = new JButton(Nquit);
 		quit.setBorderPainted(false);
@@ -105,39 +105,39 @@ public class GameScore extends JFrame{
 			}
 		});
 		scoreback.setLayout(null);
-		scoreback.setBackground(new Color(0,0,0,100));		// Á¡¼öÈ­¸éÀº Èò»ö?
-		scoreback.setSize(1600,900);				// ¹è°æ »çÀÌÁî
-		
+		scoreback.setBackground(new Color(0,0,0,100));		// ì ìˆ˜í™”ë©´ì€ í°ìƒ‰?
+		scoreback.setSize(1600,900);				// ë°°ê²½ ì‚¬ì´ì¦ˆ
+
 		add(restart);
 		add(mainmenu);
 		add(quit);
-		add(scoreback);					// ÇÁ·¹ÀÓ¿¡ ¹è°æÃß°¡
-		
+		add(scoreback);					// í”„ë ˆì„ì— ë°°ê²½ì¶”ê°€
+
 		Toolkit tk = Toolkit.getDefaultToolkit();
-	    Cursor ScoreCursor = tk.createCustomCursor(tk.createImage("src/File/Yellow.png"), new Point(), null);
-	    setCursor(ScoreCursor);
+		Cursor ScoreCursor = tk.createCustomCursor(tk.createImage("src/File/Yellow.png"), new Point(), null);
+		setCursor(ScoreCursor);
 		getGlassPane().setVisible(true);
-		
+
 		setUndecorated(true);
 		setBackground(new Color(0,0,0,100));
 		setVisible(true);
-		
+
 	}
-	// textÆÄÀÏ¿¡ ÀÔ·ÂÇÏ°í ºÒ·¯¿Ã ¸Ş¼Òµå »ı¼º
-	// ¿¹¿ÜÃ³¸®
-	public void texting() throws IOException {			
-		
-		// ÅØ½ºÆ® ÆÄÀÏ·Î µ¥ÀÌÅÍ ¸¸µé°í ºÒ·¯¿À±â
-		// ±³Àç 765ÆäÀÌÁö
-		
+	// textíŒŒì¼ì— ì…ë ¥í•˜ê³  ë¶ˆëŸ¬ì˜¬ ë©”ì†Œë“œ ìƒì„±
+	// ì˜ˆì™¸ì²˜ë¦¬
+	public void texting() throws IOException {
+
+		// í…ìŠ¤íŠ¸ íŒŒì¼ë¡œ ë°ì´í„° ë§Œë“¤ê³  ë¶ˆëŸ¬ì˜¤ê¸°
+		// êµì¬ 765í˜ì´ì§€
+
 		PrintWriter write_text = null;
-		
+
 		int i = 0;
 		double j = 0;
-		
+
 		Score = new ArrayList<Object>();
-		if(nickname.isEmpty() == true) {		// ÀÌ¸§À» ÀÔ·ÂÇÏÁö ¾Ê¾ÒÀ» ¶§ Ã³¸®
-			nickname = "ÀÌ¸§¾øÀ½";
+		if(nickname.isEmpty() == true) {		// ì´ë¦„ì„ ì…ë ¥í•˜ì§€ ì•Šì•˜ì„ ë•Œ ì²˜ë¦¬
+			nickname = "ì´ë¦„ì—†ìŒ";
 		}
 		DeleteData = new ImageIcon("src/File/DeleteData.png");
 		deleteData = new JButton(DeleteData);
@@ -152,31 +152,31 @@ public class GameScore extends JFrame{
 				GameScore GS = new GameScore("",0,0,null);
 			}
 		});
-		add(deleteData);		// ÇÁ·¹ÀÓ¿¡ Ãß°¡
-		// ÃÊ±âÈ­¸éÀ» À§ÇØ¼­...
-		if(stage != 0) {	// °ÔÀÓÀ» ÇÃ·¹ÀÌÇÏÁö ¾Ê¾ÒÀ» ¶§
+		add(deleteData);		// í”„ë ˆì„ì— ì¶”ê°€
+		// ì´ˆê¸°í™”ë©´ì„ ìœ„í•´ì„œ...
+		if(stage != 0) {	// ê²Œì„ì„ í”Œë ˆì´í•˜ì§€ ì•Šì•˜ì„ ë•Œ
 			write_text = new PrintWriter(new FileWriter("src/File/score.text", true));
-			
+
 			write_text.println(nickname + " " + stage + " " + score + " " + date + " ");
 			write_text.flush();
 		}
 		Scanner s = new Scanner(new BufferedReader(new FileReader("src/File/score.text")));
-		
+
 		while(s.hasNext()) {
-			
+
 			if(s.hasNextLine()) {
-				
+
 				Score.add(i, s.next());
 				String str = (String) Score.get(i);
 				scoreLabel = new JLabel((String)Score.get(i));
 				scoreLabel.setForeground(Color.ORANGE);
 				scoreLabel.setFont(scoreLabel.getFont().deriveFont(40.0f));
-				if(j == 1) {		// ÀûÀıÇÏ°Ô Á¡¼öÆÇÀ» ±×¸®±â À§ÇÑ ÀåÄ¡
+				if(j == 1) {		// ì ì ˆí•˜ê²Œ ì ìˆ˜íŒì„ ê·¸ë¦¬ê¸° ìœ„í•œ ì¥ì¹˜
 					j += 0.3;
 				}
-				scoreLabel.setBounds(100 + (int)(350*j), 350 + 50*(i/4), 500, 50);	// ½ºÅ×ÀÌÁö¿Í ½ºÄÚ¾î, ³¯Â¥¸¦ ÀûÀıÈ÷ ºĞ¹è
+				scoreLabel.setBounds(100 + (int)(350*j), 350 + 50*(i/4), 500, 50);	// ìŠ¤í…Œì´ì§€ì™€ ìŠ¤ì½”ì–´, ë‚ ì§œë¥¼ ì ì ˆíˆ ë¶„ë°°
 				scoreback.add(scoreLabel);
-				if(j == 1.3) {		// ¿ø·¡´ë·Î
+				if(j == 1.3) {		// ì›ë˜ëŒ€ë¡œ
 					j -= 0.3;
 				}
 				i++;
@@ -188,13 +188,13 @@ public class GameScore extends JFrame{
 				s.next();
 			}
 		}
-		if (write_text != null)			// ³¡±îÁö
+		if (write_text != null)			// ëê¹Œì§€
 			write_text.close();
 		if (s != null)
 			s.close();
-			
+
 	}
-	
+
 	public void paint(Graphics g) {
 		super.paint(g);
 		g.drawImage(BigScore.getImage(), 20, 30, null);

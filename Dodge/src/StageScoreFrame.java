@@ -9,50 +9,50 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class StageScoreFrame extends JFrame {
-	
-	private JLabel score = new JLabel();			// Á¡¼öÆÇ
-	private JLabel stage = new JLabel();			// ½ºÅ×ÀÌÁö
-	private JPanel gameback = new JPanel();			// ¹è°æÆĞ³Î	
+
+	private JLabel score = new JLabel();			// ì ìˆ˜íŒ
+	private JLabel stage = new JLabel();			// ìŠ¤í…Œì´ì§€
+	private JPanel gameback = new JPanel();			// ë°°ê²½íŒ¨ë„
 	private JLabel start = new JLabel();
 	private JLabel ready = new JLabel();
 	private JLabel life = new JLabel();
 
 	private ArrayList<Integer> userscore = null;
-	
+
 	protected int count = 0;
 	protected boolean pause = false;
 	protected boolean resume = false;
-	
-	protected int gamepoint, stagepoint;				// °ÔÀÓ ½ºÄÚ¾î¿Í ½ºÅ×ÀÌÁö
-	
+
+	protected int gamepoint, stagepoint;				// ê²Œì„ ìŠ¤ì½”ì–´ì™€ ìŠ¤í…Œì´ì§€
+
 	Runnable task = () -> {
 		while (true) {
-			
+
 			if(pause == false || resume == true) {
 				count += 1;
-				
+
 				if ( count >= 1 && count <= 15) {
-					start.setVisible(false);				// ½ÃÀÛ ¾È³» °¡¸®±â
-					
-					ready.setText("°ÔÀÓÀÌ °ğ ½ÃÀÛµË´Ï´Ù!");
+					start.setVisible(false);				// ì‹œì‘ ì•ˆë‚´ ê°€ë¦¬ê¸°
+
+					ready.setText("ê²Œì„ì´ ê³§ ì‹œì‘ë©ë‹ˆë‹¤!");
 					ready.setBounds(500,20,600,30);
 					ready.setFont(start.getFont().deriveFont(30.0f));
 					ready.setForeground(Color.ORANGE);
 				}
-				
+
 				if( count > 15) {
-					
-					ready.setVisible(false);				// ÁØºñ ¾È³» °¡¸®±â
-					
-					gamepoint = count - 16;					// °ÔÀÓ Æ÷ÀÎÆ®
-					stagepoint = (count - 16) / 100 + 1;	// ½ºÅ×ÀÌÁö Æ÷ÀÎÆ®¸¦ 1ºÎÅÍ 100Á¡¸¶´Ù ½ºÅ×ÀÌÁö¸¦ »ó½ÂÇÏ°Ô ÇÔ
-					
+
+					ready.setVisible(false);				// ì¤€ë¹„ ì•ˆë‚´ ê°€ë¦¬ê¸°
+
+					gamepoint = count - 16;					// ê²Œì„ í¬ì¸íŠ¸
+					stagepoint = (count - 16) / 100 + 1;	// ìŠ¤í…Œì´ì§€ í¬ì¸íŠ¸ë¥¼ 1ë¶€í„° 100ì ë§ˆë‹¤ ìŠ¤í…Œì´ì§€ë¥¼ ìƒìŠ¹í•˜ê²Œ í•¨
+
 					score.setText("SCORE : " + gamepoint);
 					score.setBounds(50,20,300,30);
 					score.setForeground(Color.YELLOW);
 					score.setFont(score.getFont().deriveFont(30.0f));
-						
-					stage.setText("STAGE : " + stagepoint);		// ½ºÅ×ÀÌÁö 1ºÎÅÍ
+
+					stage.setText("STAGE : " + stagepoint);		// ìŠ¤í…Œì´ì§€ 1ë¶€í„°
 					stage.setBounds(1300,20,200,30);
 					stage.setForeground(Color.GREEN);
 					stage.setFont(stage.getFont().deriveFont(30.0f));
@@ -66,7 +66,7 @@ public class StageScoreFrame extends JFrame {
 		}
 	};
 	public StageScoreFrame() {
-		
+
 		setLayout(null);
 		setUndecorated(true);
 		setBounds(50,100,1500,50);
@@ -75,25 +75,25 @@ public class StageScoreFrame extends JFrame {
 		gameback.setLayout(null);
 		gameback.setBackground(Color.BLACK);
 		gameback.setSize(1500,50);
-		
+
 		userscore = new ArrayList<Integer>();
-		
+
 		gameback.add(life);
 		gameback.add(start);
 		gameback.add(ready);
-		gameback.add(score);	// ÆĞ³Î¿¡ Ãß°¡
-		gameback.add(stage);	// ÆĞ³Î¿¡ Ãß°¡
-		add(gameback);			// frame¿¡ Ãß°¡
-		
+		gameback.add(score);	// íŒ¨ë„ì— ì¶”ê°€
+		gameback.add(stage);	// íŒ¨ë„ì— ì¶”ê°€
+		add(gameback);			// frameì— ì¶”ê°€
+
 		Thread t = new Thread(task);
 		t.start();
-		
-		// Ä¿¼­
-	    Toolkit tk = Toolkit.getDefaultToolkit();
-	    Cursor GameCursor = tk.createCustomCursor(tk.createImage("src/File/Yellow.png"), new Point(), null);
-	    setCursor(GameCursor);
+
+		// ì»¤ì„œ
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		Cursor GameCursor = tk.createCustomCursor(tk.createImage("src/File/Yellow.png"), new Point(), null);
+		setCursor(GameCursor);
 		getGlassPane().setVisible(true);
-		// Ä¿¼­ºÎºĞ
-		
+		// ì»¤ì„œë¶€ë¶„
+
 	}
 }

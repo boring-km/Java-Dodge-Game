@@ -13,37 +13,37 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 public class FirstFrame extends JFrame{
-	
+
 	private BufferedImage img;
 	private GameScore GSC;
-	private Garo spaceEffect;		// ¿ìÁÖÈ¿°ú
-	private Back back;				// °ÔÀÓ ÇÃ·¹ÀÌÈ­¸é
+	private Garo spaceEffect;		// ìš°ì£¼íš¨ê³¼
+	private Back back;				// ê²Œì„ í”Œë ˆì´í™”ë©´
 
 	public void paint(Graphics g) {
-		
+
 		super.paint(g);
 		Image img = Toolkit.getDefaultToolkit().getImage("src/File/Main1.png");
 		g.drawImage(img, 297, 300, this);
-		
+
 	}
 	public FirstFrame() {
-		
+
 		setLayout(null);
 		setBounds(50,100,1600,900);
 		setUndecorated(true);
 		setBackground(new Color(0,0,0,0));
-		
-		ImageIcon Nstart = new ImageIcon("src/File/start.png");			// °ÔÀÓ½ÃÀÛ ¹öÆ°
+
+		ImageIcon Nstart = new ImageIcon("src/File/start.png");			// ê²Œì„ì‹œì‘ ë²„íŠ¼
 		ImageIcon Rstart = new ImageIcon("src/File/start1.png");
 		ImageIcon Pstart = new ImageIcon("src/File/start2.png");
-		
+
 		JButton start = new JButton(Nstart);
 		start.setPressedIcon(Pstart);
 		start.setRolloverIcon(Rstart);
 		start.setBorderPainted(false);
 		start.setBounds(160,650,427,140);
-		
-		ImageIcon Nscore = new ImageIcon("src/File/score.png");			// Á¡¼öº¸±â ¹öÆ°
+
+		ImageIcon Nscore = new ImageIcon("src/File/score.png");			// ì ìˆ˜ë³´ê¸° ë²„íŠ¼
 		ImageIcon Rscore = new ImageIcon("src/File/score1.png");
 		ImageIcon Pscore = new ImageIcon("src/File/score2.png");
 
@@ -52,11 +52,11 @@ public class FirstFrame extends JFrame{
 		score.setRolloverIcon(Rscore);
 		score.setBorderPainted(false);
 		score.setBounds(587,650,427,140);
-		
-		ImageIcon Nquit = new ImageIcon("src/File/quit.png");			// Á¾·á¹öÆ°
+
+		ImageIcon Nquit = new ImageIcon("src/File/quit.png");			// ì¢…ë£Œë²„íŠ¼
 		ImageIcon Rquit = new ImageIcon("src/File/quit1.png");
 		ImageIcon Pquit = new ImageIcon("src/File/quit2.png");
-	
+
 		JButton quit = new JButton(Nquit);
 		quit.setPressedIcon(Pquit);
 		quit.setRolloverIcon(Rquit);
@@ -69,31 +69,31 @@ public class FirstFrame extends JFrame{
 		});
 		start.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				dispose();
 				back = new Back();
-				
+
 			}
 		});
 		score.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				dispose();
 				GSC = new GameScore("", 0, 0, null);
-				
+
 			}
 		});
-		//¸¶¿ì½º Ä¿¼­
+		//ë§ˆìš°ìŠ¤ ì»¤ì„œ
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		Cursor invisCursor = tk.createCustomCursor(tk.createImage("src/File/Yellow.png"), new Point(), null);
 		setCursor(invisCursor);
 		getGlassPane().setVisible(true);
-		//¸¶¿ì½º Ä¿¼­
-		
+		//ë§ˆìš°ìŠ¤ ì»¤ì„œ
+
 		add(start);
 		add(score);
 		add(quit);
 		setVisible(true);
 	}
-	
+
 }

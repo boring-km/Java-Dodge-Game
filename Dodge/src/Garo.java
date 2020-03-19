@@ -3,7 +3,7 @@ public class Garo extends Ball{
 	private int x;
 	private int y;
 	
-	private int Speed = (int)(Math.random()*3) + 2;
+	private int Speed = (int)(Math.random()*3) + 1;
 	
 	public int getX() {
 		return x;
