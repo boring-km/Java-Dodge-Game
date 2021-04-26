@@ -1,9 +1,6 @@
 package game.frame;
 
-import game.pattern.Diagonal;
-import game.pattern.Garo;
-import game.pattern.Garo2;
-import game.pattern.Sero;
+import game.pattern.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +11,7 @@ import java.util.ArrayList;
 
 public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 
-	private BufferedImage image;		// 화면 프레임 전체 이미지를 담을 것
+	private final BufferedImage image;		// 화면 프레임 전체 이미지를 담을 것
 	private boolean left = false, right = false, up = false, down = false;
 
 	private static final int WIDTH = 1500; 			// 전체 폭
@@ -23,23 +20,23 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 	private final int SIZE = 20;					// 구체 사이즈
 	private int PlayerSpeed = 4;				// 플레이어 속도
 	private int life = 8;						// 플레이어 목숨 8개
-	private final int SPACEBALL = 120;					// 우주배경 구체 수
-	private final int SPACEBALLSIZE = 3;
+	private final static int SPACE_BALL = 120;					// 우주배경 구체 수
+	private final static int SPACE_BALL_SIZE = 3;
 
-	private ImageIcon heart;
-	private ImageIcon showlife;
+	private final ImageIcon heartIcon;
+	private final ImageIcon showLifeIcon;
 
-	protected boolean gameisover = false;				// 게임오버 창을 한번만 만들기 위한 변수를 하나 생성
-	private int stagecounting = 0;
-	private int ball_count = 0;						// 세로로 나오는 구체 수 통제
+	protected boolean isGameOver = false;				// 게임오버 창을 한번만 만들기 위한 변수를 하나 생성
+	private int stageNumber = 0;
+	private int ballCount = 0;						// 세로로 나오는 구체 수 통제
 
-	private int[] spicy = new int[4];		// 난이도 조절용 변수
+	private final int[] difficulty = new int[4];		// 난이도 조절용 변수
 
-	private ArrayList<Object> garoList;		// 가로로 나오는 구체 리스트
-	private ArrayList<Object> garo2List;		// 가로로 나오는 구체 리스트
-	private ArrayList<Object> spaceList;		// 가로로 나오는 우주 배경 리스트
-	private ArrayList<Object> seroList;		// 세로로 나오는 구체 리스트
-	private ArrayList<Object> diaList;
+	private final ArrayList<Ball> horizontalList;		// 가로로 나오는 구체 리스트
+	private final ArrayList<Ball> reverseHorizontalList;		// 가로로 나오는 구체 리스트
+	private final ArrayList<Ball> spaceList;		// 가로로 나오는 우주 배경 리스트
+	private final ArrayList<Ball> verticalList;		// 세로로 나오는 구체 리스트
+	private final ArrayList<Ball> diagonalList;
 
 	protected String date;
 	protected StageScoreFrame SSF = new StageScoreFrame();
@@ -52,14 +49,14 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 
 		this.setLayout(null);						// 좌표를 내마음대로
 
-		garoList = new ArrayList<>();
-		garo2List = new ArrayList<>();
+		horizontalList = new ArrayList<>();
+		reverseHorizontalList = new ArrayList<>();
 		spaceList = new ArrayList<>();
-		seroList = new ArrayList<>();
-		diaList = new ArrayList<>();
+		verticalList = new ArrayList<>();
+		diagonalList = new ArrayList<>();
 
-		heart = new ImageIcon("files/heart.png");
-		showlife = new ImageIcon("files/Life.png");
+		heartIcon = new ImageIcon("files/heart.png");
+		showLifeIcon = new ImageIcon("files/Life.png");
 
 		addKeyListener(this);
 		this.requestFocus();		// 패널은 그냥 포커스를 받을수가 없다
@@ -73,107 +70,109 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 		// TODO Auto-generated method stub
 		try {
 			while(true) {
+				//noinspection BusyWait
 				Thread.sleep(8);
 				spaceCreate(); 			// 우주 배경
-				losing_life();
+				loseLifePoint();
 
 				// 스테이지 1
-				if( ball_count > 100 && SSF.getStagepoint() == 1) {
+				if( ballCount > 100 && SSF.getStagepoint() == 1) {
 
-					spicy[0] = 10;
+					difficulty[0] = 10;
 
 					leftCreate(); rightCreate(); upCreate();
 
-					ball_count = 0;
-					stagecounting = SSF.getStagepoint();				// 스테이지를 기억해줌 stagecounting = 1;
+					ballCount = 0;
+					stageNumber = SSF.getStagepoint();				// 스테이지를 기억해줌 stagecounting = 1;
 				}
 
 				// 스테이지가 바뀔 때마다 life를 하나씩 준다.
-				if( stagecounting < SSF.getStagepoint()) {
+				if( stageNumber < SSF.getStagepoint()) {
 					life++;
-					stagecounting = SSF.getStagepoint();
+					stageNumber = SSF.getStagepoint();
 				}
 
 				// 스테이지 2
-				if(ball_count > 150 && SSF.getStagepoint() == 2) {
+				if(ballCount > 150 && SSF.getStagepoint() == 2) {
 
-					spicy[0] = 10;		spicy[1] = 10;
+					difficulty[0] = 10;		difficulty[1] = 10;
 
 					leftCreate(); 		rightCreate();
-					ball_count = 0;
-					stagecounting = SSF.getStagepoint();
+					ballCount = 0;
+					stageNumber = SSF.getStagepoint();
 				}
 				// 스테이지 3
-				if( ball_count > 250 && SSF.getStagepoint() == 3) {		// 곳곳에서 팡팡 터진다!!!!
+				if( ballCount > 250 && SSF.getStagepoint() == 3) {		// 곳곳에서 팡팡 터진다!!!!
 
-					spicy[3] = 10;
+					difficulty[3] = 10;
 
 					for(int i = 0; i < 6; i++)
 						diaCreate();
-					ball_count = 0;
-					stagecounting = SSF.getStagepoint();
+					ballCount = 0;
+					stageNumber = SSF.getStagepoint();
 				}
 				// 스테이지 4
-				if( ball_count > 300 && SSF.getStagepoint() == 4) {
+				if( ballCount > 300 && SSF.getStagepoint() == 4) {
 
-					spicy[0] = 10;
-					spicy[1] = 10;
+					difficulty[0] = 10;
+					difficulty[1] = 10;
 
 					rightCreate(); 	leftCreate();
 
-					spicy[3] = 10;
+					difficulty[3] = 10;
 					for(int i = 0; i < 5; i++)
 						diaCreate();
-					ball_count = 0;
-					stagecounting = SSF.getStagepoint();
+					ballCount = 0;
+					stageNumber = SSF.getStagepoint();
 				}
 				// 스테이지 5
-				if( ball_count > 300 && SSF.getStagepoint() == 5) {
+				if( ballCount > 300 && SSF.getStagepoint() == 5) {
 
 					for(int i = 0; i < 3; i++)
-						spicy[i] = (i*10) + 5;
+						difficulty[i] = (i*10) + 5;
 
 					upCreate();		rightCreate();		leftCreate();
 
 					for(int i = 0; i < 5; i++)
 						diaCreate();
 
-					ball_count = 0;
-					stagecounting = SSF.getStagepoint();
+					ballCount = 0;
+					stageNumber = SSF.getStagepoint();
 				}
 				// 스테이지 6
-				if( ball_count > 250 && SSF.getStagepoint() == 6) {
+				if( ballCount > 250 && SSF.getStagepoint() == 6) {
 
 					for(int i = 0; i < 3; i++)
-						spicy[i] = (i*10) + 2;
+						difficulty[i] = (i*10) + 2;
 
 					upCreate();		rightCreate();		leftCreate();
 
 					for(int i = 0; i < 10; i++)
 						diaCreate();
-					ball_count = 0;
-					stagecounting = SSF.getStagepoint();
+					ballCount = 0;
+					stageNumber = SSF.getStagepoint();
 				}
 
 				// 스테이지 7 이후
-				if( ball_count > 200 && SSF.getStagepoint() >= 7) {
+				if( ballCount > 200 && SSF.getStagepoint() >= 7) {
 
 					for(int i = 0; i < 3; i++)
-						spicy[i] = (int)(Math.random() * 15) + 4;
+						difficulty[i] = (int)(Math.random() * 15) + 4;
 
 					upCreate();		rightCreate();		leftCreate();
 					for(int i = 0; i < 15; i++)
 						diaCreate();
-					ball_count = 0;
+					ballCount = 0;
 				}
 
-				ball_count++;
+				ballCount++;
 				draw();
 				keyControl();
 
-				if(life <= 0 && !gameisover) {
+				if(life <= 0 && !isGameOver) {
+					//noinspection ResultOfMethodCallIgnored
 					Thread.interrupted();
-					gameisover = true;
+					isGameOver = true;
 					PlayerSpeed = 0;
 					SSF.setPause(true);
 					SSF.setResume(false);
@@ -208,35 +207,35 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 	// 구체 이동 메소드
 	// 가로로 왼쪽에서 나오는 구체 생성
 	public void leftCreate() {
-		for(int i = 0; i < spicy[0]; i++) {
+		for(int i = 0; i < difficulty[0]; i++) {
 			double xc = (Math.random() * 60) - 200;		// 시작 위치
 			double yc = Math.random() * HEIGHT;	// 시작 위치
-			Garo garo = new Garo();
-			garo.setX((int)xc);
-			garo.setY((int)yc);
-			garoList.add(garo);
+			HorizontalBall horizontalBall = new HorizontalBall();
+			horizontalBall.setX((int)xc);
+			horizontalBall.setY((int)yc);
+			horizontalList.add(horizontalBall);
 		}
 	}
 	// 가로로 오른쪽에서 나오는 구체 생성
 	public void rightCreate() {
-		for(int i = 0; i < spicy[1]; i++) {
+		for(int i = 0; i < difficulty[1]; i++) {
 			double xc = WIDTH + 200 - (Math.random() * 60);		// 시작 위치
 			double yc = Math.random() * HEIGHT;	// 시작 위치
-			Garo2 garo2 = new Garo2();
-			garo2.setX((int)xc);
-			garo2.setY((int)yc);
-			garo2List.add(garo2);
+			ReverseHorizontalBall reverseHorizontalBall = new ReverseHorizontalBall();
+			reverseHorizontalBall.setX((int)xc);
+			reverseHorizontalBall.setY((int)yc);
+			reverseHorizontalList.add(reverseHorizontalBall);
 		}
 	}
 	// 세로로 나오는 구체 생성
 	public void upCreate() {
-		for(int i = 0; i < spicy[2]; i++) {
+		for(int i = 0; i < difficulty[2]; i++) {
 			double xc = Math.random() * WIDTH;
 			double yc = (Math.random() * 100) - HEIGHT;	// 시작 위치
-			Sero sero = new Sero();
-			sero.setX((int)xc);
-			sero.setY((int)yc);
-			seroList.add(sero);
+			VerticalBall verticalBall = new VerticalBall();
+			verticalBall.setX((int)xc);
+			verticalBall.setY((int)yc);
+			verticalList.add(verticalBall);
 		}
 	}
 	// 대각선으로 나오는 구체 생성
@@ -245,19 +244,19 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 		double xdia = Math.random() * WIDTH;
 		double ydia = Math.random() * HEIGHT;
 
-		for(int i = 1; i < spicy[3]; i++) {
+		for(int i = 1; i < difficulty[3]; i++) {
 
-			Diagonal dia = new Diagonal();
+			DiagonalBall dia = new DiagonalBall();
 			dia.setX((int)xdia);
 			dia.setY((int)ydia);
-			diaList.add(dia);
+			diagonalList.add(dia);
 		}
 	}
 	public void spaceCreate() {
-		for(int i = 0; i < SPACEBALL; i++) {
+		for(int i = 0; i < SPACE_BALL; i++) {
 			double xs = Math.random() * WIDTH;
 			double ys = Math.random() * HEIGHT;
-			Garo space = new Garo();
+			HorizontalBall space = new HorizontalBall();
 			space.setX((int)xs);
 			space.setY((int)ys);
 			spaceList.add(space);
@@ -276,57 +275,58 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 		g.fillOval(x, y, SIZE, SIZE);
 
 		g.setColor(Color.YELLOW);								// 왼쪽에서 오른쪽
-		for(int i = 0; i < garoList.size(); i++) {
-			Garo garo = (Garo)garoList.get(i);				// 형변환
-			g.fillOval(garo.getX(), garo.getY(), garo.getRad(), garo.getRad());
-			if(garo.getX() > WIDTH)								// 화면넘어가면 삭제
-				garoList.remove(i);
-			garo.move();
+		// TODO: Loop에서 remove하는 연산은 개선이 필요하다
+		for(int i = 0; i < horizontalList.size(); i++) {
+			HorizontalBall horizontalBall = (HorizontalBall) horizontalList.get(i);				// 형변환
+			g.fillOval(horizontalBall.getX(), horizontalBall.getY(), horizontalBall.getRad(), horizontalBall.getRad());
+			if(horizontalBall.getX() > WIDTH)								// 화면넘어가면 삭제
+				horizontalList.remove(i);
+			horizontalBall.move();
 		}
 
 		g.setColor(Color.YELLOW);								// 위에서 아래로
-		for(int i = 0; i < seroList.size(); i++) {
-			Sero sero = (Sero)seroList.get(i);				// 형변환
-			g.fillOval(sero.getX(), sero.getY(), sero.getRad(), sero.getRad());
-			if(sero.getX() > WIDTH)								// // 화면넘어가면 삭제
-				seroList.remove(i);
-			sero.move();
+		for(int i = 0; i < verticalList.size(); i++) {
+			VerticalBall verticalBall = (VerticalBall) verticalList.get(i);				// 형변환
+			g.fillOval(verticalBall.getX(), verticalBall.getY(), verticalBall.getRad(), verticalBall.getRad());
+			if(verticalBall.getX() > WIDTH)								// // 화면넘어가면 삭제
+				verticalList.remove(i);
+			verticalBall.move();
 		}
 
 		g.setColor(Color.YELLOW);								// 오른쪽 가로
-		for(int i = 0; i < garo2List.size(); i++) {
-			Garo2 garo2 = (Garo2)garo2List.get(i);				// 형변환
-			g.fillOval(garo2.getX(), garo2.getY(), garo2.getRad(), garo2.getRad());
-			if(garo2.getX() < 0)									// 화면넘어가면 삭제
-				garo2List.remove(i);
-			garo2.move();
+		for(int i = 0; i < reverseHorizontalList.size(); i++) {
+			ReverseHorizontalBall reverseHorizontalBall = (ReverseHorizontalBall) reverseHorizontalList.get(i);				// 형변환
+			g.fillOval(reverseHorizontalBall.getX(), reverseHorizontalBall.getY(), reverseHorizontalBall.getRad(), reverseHorizontalBall.getRad());
+			if(reverseHorizontalBall.getX() < 0)									// 화면넘어가면 삭제
+				reverseHorizontalList.remove(i);
+			reverseHorizontalBall.move();
 		}
 
 		g.setColor(Color.YELLOW);								// 대각선 3->7
-		for(int i = 0; i < diaList.size(); i++) {
-			Diagonal dia = (Diagonal)diaList.get(i);				// 형변환
+		for(int i = 0; i < diagonalList.size(); i++) {
+			DiagonalBall dia = (DiagonalBall) diagonalList.get(i);				// 형변환
 			g.fillOval(dia.getX(), dia.getY(), dia.getRad(), dia.getRad());
 
 			if(dia.getX() < 0) {									// 화면넘어가면 삭제
 
-				diaList.remove(i);
+				diagonalList.remove(i);
 			}
 			dia.move();
 		}
 
 		g.setColor(Color.WHITE);								// 우주같은 배경
-		for(int i = 0; i < SPACEBALL; i++) {
-			Garo space = (Garo)spaceList.get(i);
-			g.fillOval(space.getX(), space.getY(), SPACEBALLSIZE, SPACEBALLSIZE);				// 조그마한 흰색 점을 많이 찍어서 우주처럼 연출시킬 예정
+		for(int i = 0; i < SPACE_BALL; i++) {
+			HorizontalBall space = (HorizontalBall)spaceList.get(i);
+			g.fillOval(space.getX(), space.getY(), SPACE_BALL_SIZE, SPACE_BALL_SIZE);				// 조그마한 흰색 점을 많이 찍어서 우주처럼 연출시킬 예정
 			if(space.getX() > WIDTH)
 				spaceList.remove(i);
 			space.move();
 		}
 
-		g.drawImage(showlife.getImage(), 0, 690, null);		// Life :
+		g.drawImage(showLifeIcon.getImage(), 0, 690, null);		// Life :
 		for(int i = 0; i < life; i++) {
 
-			g.drawImage(heart.getImage(), 160 + 80*i, 700, null);		// ♥♥♥ 하트갯수
+			g.drawImage(heartIcon.getImage(), 160 + 80*i, 700, null);		// ♥♥♥ 하트갯수
 		}
 
 		Graphics g2 = this.getGraphics();						// 프레임 전체를 이미지형태로 그린다 -> 쓰레드를 통해서 계속 불러오기 위함
@@ -386,58 +386,22 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 	@Override
 	public void keyTyped(KeyEvent e) {}
 
-	public void losing_life() {
+	private void loseLifePoint() {
+		collide(x, y, horizontalList);
+		collide(x, y, reverseHorizontalList);
+		collide(x, y, verticalList);
+		collide(x, y, diagonalList);
+	}
 
-		Polygon poly = null;							// 다각형 그리기
-
-		for(int i = 0; i < garoList.size(); i++) {
-
-			Garo ga = (Garo)garoList.get(i);
-
-			int[] xpoint = {x, (x + ga.getRad()), (x + ga.getRad()), x};		// 사각형 4개의 점의 x의 좌표를 그려준다.
-			int[] ypoint = {y, y, (y + ga.getRad()), (y + ga.getRad())};		// 사각형 4개의 점의 y의 좌표를 그려준다.
-			poly = new Polygon(xpoint, ypoint, 4);
-			if(poly.intersects((double)ga.getX(), (double)ga.getY(), (double)ga.getRad(), (double)ga.getRad())) {
-				garoList.remove(i);		// 플레이어의 다각형과 가로 구체들 간의 충돌 시
-				life -= 1;
-			}
-		}
-
-		for(int i = 0; i < garo2List.size(); i++) {
-
-			Garo2 ga2 = (Garo2)garo2List.get(i);
-
-			int[] xpoint = {x, (x + ga2.getRad()), (x + ga2.getRad()), x};		// 사각형 4개의 점의 x의 좌표를 그려준다.
-			int[] ypoint = {y, y, (y + ga2.getRad()), (y + ga2.getRad())};		// 사각형 4개의 점의 y의 좌표를 그려준다.
-			poly = new Polygon(xpoint, ypoint, 4);
-			if(poly.intersects((double)ga2.getX(), (double)ga2.getY(), (double)ga2.getRad(), (double)ga2.getRad())) {
-				garo2List.remove(i);		// 플레이어의 다각형과 가로 구체들 간의 충돌 시
-				life -= 1;
-			}
-		}
-
-		for(int i = 0; i < seroList.size(); i++) {
-
-			Sero se = (Sero)seroList.get(i);
-
-			int[] xpoint = {x, (x + SIZE), (x + SIZE), x};
-			int[] ypoint = {y, y, (y + SIZE), (y + SIZE)};
-			poly = new Polygon(xpoint, ypoint, 4);
-			if(poly.intersects((double)se.getX(), (double)se.getY(), (double)se.getRad(), (double)se.getRad())) {
-				seroList.remove(i);		// 플레이어의 다각형과 세로 구체들 간의 충돌 시
-				life -= 1;
-			}
-		}
-
-		for(int i = 0; i < diaList.size(); i++) {
-
-			Diagonal dia = (Diagonal)diaList.get(i);
-
-			int[] xpoint = {x, (x + SIZE), (x + SIZE), x};		// 사각형 4개의 점의 x의 좌표를 그려준다.
-			int[] ypoint = {y, y, (y + SIZE), (y + SIZE)};		// 사각형 4개의 점의 y의 좌표를 그려준다.
-			poly = new Polygon(xpoint, ypoint, 4);
-			if(poly.intersects((double)dia.getX(), (double)dia.getY(), (double)dia.getRad(), (double)dia.getRad())) {
-				diaList.remove(i);		// 플레이어의 다각형과 대각선 구체들 간의 충돌 시
+	private void collide(int x, int y, ArrayList<Ball> ballList) {
+		for (int i = 0, len = ballList.size(); i < len; i++) {
+			Ball ball = ballList.get(i);
+			int rad = ball.getRad();
+			int[] xPoint = {x, x + rad, x + rad, x};
+			int[] yPoint = {y, y + rad, y + rad, y};
+			Polygon polygon = new Polygon(xPoint, yPoint, 4);
+			if (polygon.intersects(ball.getX(), ball.getY(), rad, rad)) {
+				horizontalList.remove(i);
 				life -= 1;
 			}
 		}
