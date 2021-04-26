@@ -1,4 +1,4 @@
-package items;
+package game.buttons;
 
 import lombok.Builder;
 
