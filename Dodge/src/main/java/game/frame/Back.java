@@ -5,6 +5,7 @@ import game.music.BackMusic;
 import javax.swing.*;
 import java.awt.*;
 
+@SuppressWarnings("ALL")
 public class Back extends JFrame {
 
 	private final GameMainPanel game;
@@ -119,7 +120,7 @@ public class Back extends JFrame {
 		setUndecorated(true);
 		setVisible(true);
 
-		BackMusic introBackMusic = new BackMusic("files/Toru - Life.mp3", true);		// 음악재생!
+		BackMusic introBackMusic = new BackMusic(true);		// 음악재생!
 		introBackMusic.start();
 
 		pause.addActionListener(e -> {	// 멈추기
@@ -134,7 +135,7 @@ public class Back extends JFrame {
 			game.addKeyListener(game);
 			game.setFocusable(true);
 			game.requestFocus();
-			if(!game.gameisover) {				// 게임이 안 끝났을 때에만 점수를 멈춘다
+			if(!game.isGameOver) {				// 게임이 안 끝났을 때에만 점수를 멈춘다
 				game.SSF.setResume(true);
 				game.SSF.setPause(false);
 			}
@@ -144,7 +145,7 @@ public class Back extends JFrame {
 			introBackMusic.stop();
 			dispose();					// 메뉴화면 종료
 			game.SSF.dispose();				// 점수화면 종료
-			if(game.gameisover) {
+			if(game.isGameOver) {
 				game.gameover.dispose();	// 게임오버화면도 종료
 				game.nk.dispose();
 			}
@@ -155,7 +156,7 @@ public class Back extends JFrame {
 			introBackMusic.suspend();
 			dispose();
 			game.SSF.dispose();
-			if(game.gameisover) {
+			if(game.isGameOver) {
 				if(game.nk.nickname != null)
 					new GameScore(game.nk.nickname, game.SSF.getGamepoint(), game.SSF.getStagepoint(), game.date);
 				else if(game.SSF.getGamepoint() == 0)
@@ -174,7 +175,7 @@ public class Back extends JFrame {
 			introBackMusic.stop();
 			dispose();
 			game.SSF.dispose();
-			if(game.gameisover) {
+			if(game.isGameOver) {
 				game.gameover.dispose();	// 게임오버화면도 종료
 				game.nk.dispose();
 			}
