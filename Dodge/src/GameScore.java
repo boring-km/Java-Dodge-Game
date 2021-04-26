@@ -44,7 +44,7 @@ public class GameScore extends JFrame{
 	private JButton quit;
 	private JButton deleteData;
 
-	private FirstFrame FF;		// 버튼에서 실행해줄 프레임
+	private GameStart FF;		// 버튼에서 실행해줄 프레임
 	private Back newgame;
 
 	public GameScore(String nickname, int score, int stage, String date) {
@@ -80,7 +80,7 @@ public class GameScore extends JFrame{
 		mainmenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				FF = new FirstFrame();
+				FF = new GameStart();
 			}
 		});
 

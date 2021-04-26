@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 public class Back extends JFrame {
 
 	private GameMainFrame game;
-	private FirstFrame FF;
+	private GameStart FF;
 	private GameScore GS;
 	private boolean music = true;
 
@@ -209,7 +209,7 @@ public class Back extends JFrame {
 					game.gameover.dispose();	// 게임오버화면도 종료
 					game.nk.dispose();
 				}
-				FF = new FirstFrame();
+				FF = new GameStart();
 			}
 		});
 		// 커서
