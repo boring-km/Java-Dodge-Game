@@ -66,6 +66,7 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 	public void run() {
 
 		try {
+			// 게임 실행 시 GameMainPanel 객체가 생성되기 전에 Back 프레임에 추가되지 않도록 타이밍을 위해 잠시 기다려준다.
 			Thread.sleep(50);
 			while(true) {
 				//noinspection BusyWait
