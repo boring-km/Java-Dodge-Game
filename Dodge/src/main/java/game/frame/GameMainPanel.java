@@ -72,6 +72,7 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 
 		// TODO Auto-generated method stub
 		try {
+			Thread.sleep(8);
 			while(true) {
 				Thread.sleep(8);
 				spaceCreate(); 			// 우주 배경
