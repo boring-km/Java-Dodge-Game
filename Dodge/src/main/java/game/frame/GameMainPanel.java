@@ -66,6 +66,7 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 	public void run() {
 
 		try {
+			Thread.sleep(50);
 			while(true) {
 				//noinspection BusyWait
 				Thread.sleep(8);
@@ -259,13 +260,12 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 	private void draw() {
 
 		Graphics g = image.getGraphics();						// 이미지 버퍼를 생성하여 이 안에 객체들을 그려넣고 g2에서 계속해서 전체를 이미지로 그려낸다
-		// 				이렇게 해야 유저를 움직이는 모션이 부드러워졌다!
+		// 	이렇게 구현해야 유저를 움직이는 모션이 진다!
 		g.setColor(Color.BLACK);								// 검은 바탕
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 
-		// 유저 ball
-		int randomRGB = (int) (Math.random() * 255.0);
-		g.setColor(new Color(randomRGB, randomRGB, randomRGB));
+		// 유저 ball 무지개색
+		g.setColor(new Color((int) (Math.random() * 255.0), (int) (Math.random() * 255.0), (int) (Math.random() * 255.0)));
 		g.fillOval(x, y, SIZE, SIZE);
 
 		// 장애물 ball
@@ -303,7 +303,7 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 		for (int i = 0, len = ballList.size(); i < len; i++) {
 			Ball ball = ballList.get(i);
 			g.fillOval(ball.getX(), ball.getY(), ball.getRad(), ball.getRad());
-			if ((ball.getX() > limit && limit > 0) || ball.getX() < 0) {
+			if ((ball.getX() > limit && limit > 0) || ball.getX() < 0 && limit == 0) {
 				ballList.remove(i);
 			}
 			ball.move();
