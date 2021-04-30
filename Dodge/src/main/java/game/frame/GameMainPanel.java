@@ -181,6 +181,7 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 
 			}
 		} catch(Exception e) {
+			e.printStackTrace();
 			System.out.println("정상적인 오류입니다.");
 		}
 	}
@@ -370,7 +371,7 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 	}
 
 	private void collide(int x, int y, ArrayList<Ball> ballList) {
-		for (int i = 0, len = ballList.size(); i < len; i++) {
+		for (int i = 0; i < ballList.size(); i++) {
 			Ball ball = ballList.get(i);
 			int rad = ball.getRad();
 			int[] xPoint = {x, x + rad, x + rad, x};
