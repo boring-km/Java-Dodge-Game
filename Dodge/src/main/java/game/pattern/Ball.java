@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Ball {
+public abstract class Ball {
 
 	protected int x;
 	protected int y;
@@ -14,4 +14,6 @@ public class Ball {
 	public int getRad() {
 		return RAD;
 	}
+
+	public abstract void move();
 }

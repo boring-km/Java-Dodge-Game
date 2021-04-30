@@ -44,7 +44,6 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 	protected Nickname nk;					// 게임오버 시 닉네임 입력
 
 	public GameMainPanel() {
-
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);		// 가로,세로와,정수형타입의 RGB
 
 		this.setLayout(null);						// 좌표를 내마음대로
@@ -61,7 +60,6 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 		addKeyListener(this);
 		this.requestFocus();		// 패널은 그냥 포커스를 받을수가 없다
 		setFocusable(true);
-
 	}
 
 	@Override
@@ -105,8 +103,7 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 
 					difficulty[3] = 10;
 
-					for(int i = 0; i < 6; i++)
-						diaCreate();
+					for(int i = 0; i < 6; i++) diaCreate();
 					ballCount = 0;
 					stageNumber = SSF.getStagepoint();
 				}
@@ -239,12 +236,9 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 	}
 	// 대각선으로 나오는 구체 생성
 	public void diaCreate() {
-
 		double xdia = Math.random() * WIDTH;
 		double ydia = Math.random() * HEIGHT;
-
 		for(int i = 1; i < difficulty[3]; i++) {
-
 			DiagonalBall dia = new DiagonalBall();
 			dia.setX((int)xdia);
 			dia.setY((int)ydia);
@@ -269,64 +263,51 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 		g.setColor(Color.BLACK);								// 검은 바탕
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 
-		g.setColor(new Color((int)(Math.random() * 255.0), (int)(Math.random() * 255.0),
-				(int)(Math.random() * 255.0) ));								// 유저 모양과 색
+		// 유저 ball
+		int randomRGB = (int) (Math.random() * 255.0);
+		g.setColor(new Color(randomRGB, randomRGB, randomRGB));
 		g.fillOval(x, y, SIZE, SIZE);
 
-		g.setColor(Color.YELLOW);								// 왼쪽에서 오른쪽
-		// TODO: Loop에서 remove하는 연산은 개선이 필요하다
-		for(int i = 0; i < horizontalList.size(); i++) {
-			HorizontalBall horizontalBall = (HorizontalBall) horizontalList.get(i);				// 형변환
-			g.fillOval(horizontalBall.getX(), horizontalBall.getY(), horizontalBall.getRad(), horizontalBall.getRad());
-			if(horizontalBall.getX() > WIDTH)								// 화면넘어가면 삭제
-				horizontalList.remove(i);
-			horizontalBall.move();
-		}
+		// 장애물 ball
+		g.setColor(Color.YELLOW);
+		drawBalls(g, horizontalList, WIDTH);
+		drawBalls(g, verticalList, WIDTH);
+		drawBalls(g, reverseHorizontalList, 0);
+		drawBalls(g, diagonalList, 0);
 
-		for(int i = 0; i < verticalList.size(); i++) {
-			VerticalBall vb = (VerticalBall) verticalList.get(i);				// 형변환
-			g.fillOval(vb.getX(), vb.getY(), vb.getRad(), vb.getRad());
-			if(vb.getX() > WIDTH)								// // 화면넘어가면 삭제
-				verticalList.remove(i);
-			vb.move();
-		}
-
-		for(int i = 0; i < reverseHorizontalList.size(); i++) {
-			ReverseHorizontalBall rhb = (ReverseHorizontalBall) reverseHorizontalList.get(i);				// 형변환
-			g.fillOval(rhb.getX(), rhb.getY(), rhb.getRad(), rhb.getRad());
-			if(rhb.getX() < 0)									// 화면넘어가면 삭제
-				reverseHorizontalList.remove(i);
-			rhb.move();
-		}
-
-		for(int i = 0; i < diagonalList.size(); i++) {
-			DiagonalBall db = (DiagonalBall) diagonalList.get(i);				// 형변환
-			g.fillOval(db.getX(), db.getY(), db.getRad(), db.getRad());
-
-			if(db.getX() < 0) {									// 화면넘어가면 삭제
-
-				diagonalList.remove(i);
-			}
-			db.move();
-		}
-
-		g.setColor(Color.WHITE);								// 우주같은 배경
+		// 우주같은 배경 ball
+		g.setColor(Color.WHITE);
 		for(int i = 0; i < SPACE_BALL; i++) {
 			HorizontalBall spaceBall = (HorizontalBall)spaceList.get(i);
-			g.fillOval(spaceBall.getX(), spaceBall.getY(), SPACE_BALL_SIZE, SPACE_BALL_SIZE);				// 조그마한 흰색 점을 많이 찍어서 우주처럼 연출시킬 예정
+			// 조그마한 흰색 점을 많이 찍어서 우주처럼 연출함
+			g.fillOval(spaceBall.getX(), spaceBall.getY(), SPACE_BALL_SIZE, SPACE_BALL_SIZE);
 			if(spaceBall.getX() > WIDTH)
+				//noinspection SuspiciousListRemoveInLoop
 				spaceList.remove(i);
 			spaceBall.move();
 		}
 
-		g.drawImage(showLifeIcon.getImage(), 0, 690, null);		// Life :
+		// Life : 이미지
+		g.drawImage(showLifeIcon.getImage(), 0, 690, null);
 		for(int i = 0; i < life; i++) {
-			g.drawImage(heartIcon.getImage(), 160 + 80*i, 700, null);		// ♥♥♥ 하트갯수
+			// ♥♥♥ 하트 이미지
+			g.drawImage(heartIcon.getImage(), 160 + 80*i, 700, null);
 		}
 
-		Graphics g2 = this.getGraphics();						// JPanel 전체를 이미지형태로 그린다 -> 쓰레드를 통해서 계속 불러오기 위함
+		// JPanel 전체를 이미지형태로 그린다 -> 쓰레드를 통해서 계속 불러오기 위함
+		Graphics g2 = this.getGraphics();
 		g2.drawImage(image, 0, 0, WIDTH, HEIGHT, this);
+	}
 
+	private void drawBalls(Graphics g, ArrayList<Ball> ballList, int limit) {
+		for (int i = 0, len = ballList.size(); i < len; i++) {
+			Ball ball = ballList.get(i);
+			g.fillOval(ball.getX(), ball.getY(), ball.getRad(), ball.getRad());
+			if ((ball.getX() > limit && limit > 0) || ball.getX() < 0) {
+				ballList.remove(i);
+			}
+			ball.move();
+		}
 	}
 
 	public void keyPressed(KeyEvent e){
