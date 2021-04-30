@@ -18,7 +18,7 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 	private static final int HEIGHT = 800; 			// 전체 높이
 	private int x = 750, y = 400;			// 움직일 구체 초기 위치(구체 좌표)
 	private final int SIZE = 20;					// 구체 사이즈
-	private int PlayerSpeed = 4;				// 플레이어 속도
+	private int playerSpeed = 4;				// 플레이어 속도
 	private int life = 8;						// 플레이어 목숨 8개
 	private final static int SPACE_BALL = 120;					// 우주배경 구체 수
 	private final static int SPACE_BALL_SIZE = 3;
@@ -65,9 +65,8 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 	}
 
 	@Override
-	public void run() {							// Runnable 인터페이스를 사용해서 필수적인 오버라이드!
+	public void run() {
 
-		// TODO Auto-generated method stub
 		try {
 			while(true) {
 				//noinspection BusyWait
@@ -173,7 +172,7 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 					//noinspection ResultOfMethodCallIgnored
 					Thread.interrupted();
 					isGameOver = true;
-					PlayerSpeed = 0;
+					playerSpeed = 0;
 					SSF.setPause(true);
 					SSF.setResume(false);
 					gameover = new GameOver();
@@ -192,16 +191,16 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 	public void keyControl() {
 
 		if(0 < x) {
-			if(left) x -= PlayerSpeed;
+			if(left) x -= playerSpeed;
 		}
 		if(WIDTH > x + SIZE) {
-			if(right) x += PlayerSpeed;
+			if(right) x += playerSpeed;
 		}
 		if(0 < y) {
-			if(up) y -= PlayerSpeed;
+			if(up) y -= playerSpeed;
 		}
 		if(HEIGHT > y + SIZE) {
-			if(down) y += PlayerSpeed;
+			if(down) y += playerSpeed;
 		}
 	}
 	// 구체 이동 메소드
@@ -263,7 +262,7 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 		}
 	}
 
-	public void draw() {
+	private void draw() {
 
 		Graphics g = image.getGraphics();						// 이미지 버퍼를 생성하여 이 안에 객체들을 그려넣고 g2에서 계속해서 전체를 이미지로 그려낸다
 		// 				이렇게 해야 유저를 움직이는 모션이 부드러워졌다!
@@ -284,52 +283,48 @@ public class GameMainPanel extends JPanel implements Runnable, KeyListener{
 			horizontalBall.move();
 		}
 
-		g.setColor(Color.YELLOW);								// 위에서 아래로
 		for(int i = 0; i < verticalList.size(); i++) {
-			VerticalBall verticalBall = (VerticalBall) verticalList.get(i);				// 형변환
-			g.fillOval(verticalBall.getX(), verticalBall.getY(), verticalBall.getRad(), verticalBall.getRad());
-			if(verticalBall.getX() > WIDTH)								// // 화면넘어가면 삭제
+			VerticalBall vb = (VerticalBall) verticalList.get(i);				// 형변환
+			g.fillOval(vb.getX(), vb.getY(), vb.getRad(), vb.getRad());
+			if(vb.getX() > WIDTH)								// // 화면넘어가면 삭제
 				verticalList.remove(i);
-			verticalBall.move();
+			vb.move();
 		}
 
-		g.setColor(Color.YELLOW);								// 오른쪽 가로
 		for(int i = 0; i < reverseHorizontalList.size(); i++) {
-			ReverseHorizontalBall reverseHorizontalBall = (ReverseHorizontalBall) reverseHorizontalList.get(i);				// 형변환
-			g.fillOval(reverseHorizontalBall.getX(), reverseHorizontalBall.getY(), reverseHorizontalBall.getRad(), reverseHorizontalBall.getRad());
-			if(reverseHorizontalBall.getX() < 0)									// 화면넘어가면 삭제
+			ReverseHorizontalBall rhb = (ReverseHorizontalBall) reverseHorizontalList.get(i);				// 형변환
+			g.fillOval(rhb.getX(), rhb.getY(), rhb.getRad(), rhb.getRad());
+			if(rhb.getX() < 0)									// 화면넘어가면 삭제
 				reverseHorizontalList.remove(i);
-			reverseHorizontalBall.move();
+			rhb.move();
 		}
 
-		g.setColor(Color.YELLOW);								// 대각선 3->7
 		for(int i = 0; i < diagonalList.size(); i++) {
-			DiagonalBall dia = (DiagonalBall) diagonalList.get(i);				// 형변환
-			g.fillOval(dia.getX(), dia.getY(), dia.getRad(), dia.getRad());
+			DiagonalBall db = (DiagonalBall) diagonalList.get(i);				// 형변환
+			g.fillOval(db.getX(), db.getY(), db.getRad(), db.getRad());
 
-			if(dia.getX() < 0) {									// 화면넘어가면 삭제
+			if(db.getX() < 0) {									// 화면넘어가면 삭제
 
 				diagonalList.remove(i);
 			}
-			dia.move();
+			db.move();
 		}
 
 		g.setColor(Color.WHITE);								// 우주같은 배경
 		for(int i = 0; i < SPACE_BALL; i++) {
-			HorizontalBall space = (HorizontalBall)spaceList.get(i);
-			g.fillOval(space.getX(), space.getY(), SPACE_BALL_SIZE, SPACE_BALL_SIZE);				// 조그마한 흰색 점을 많이 찍어서 우주처럼 연출시킬 예정
-			if(space.getX() > WIDTH)
+			HorizontalBall spaceBall = (HorizontalBall)spaceList.get(i);
+			g.fillOval(spaceBall.getX(), spaceBall.getY(), SPACE_BALL_SIZE, SPACE_BALL_SIZE);				// 조그마한 흰색 점을 많이 찍어서 우주처럼 연출시킬 예정
+			if(spaceBall.getX() > WIDTH)
 				spaceList.remove(i);
-			space.move();
+			spaceBall.move();
 		}
 
 		g.drawImage(showLifeIcon.getImage(), 0, 690, null);		// Life :
 		for(int i = 0; i < life; i++) {
-
 			g.drawImage(heartIcon.getImage(), 160 + 80*i, 700, null);		// ♥♥♥ 하트갯수
 		}
 
-		Graphics g2 = this.getGraphics();						// 프레임 전체를 이미지형태로 그린다 -> 쓰레드를 통해서 계속 불러오기 위함
+		Graphics g2 = this.getGraphics();						// JPanel 전체를 이미지형태로 그린다 -> 쓰레드를 통해서 계속 불러오기 위함
 		g2.drawImage(image, 0, 0, WIDTH, HEIGHT, this);
 
 	}
