@@ -74,7 +74,7 @@ public class StageScoreFrame extends JFrame {
 
 		setLayout(null);
 		setUndecorated(true);
-		setBounds(0,100,1500,50);
+		setBounds(100,100,1500,50);
 		setVisible(true);
 		setAlwaysOnTop(true);
 		gameback.setLayout(null);
