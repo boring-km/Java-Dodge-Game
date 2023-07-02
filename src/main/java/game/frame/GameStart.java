@@ -9,7 +9,7 @@ public class GameStart extends JFrame {
 
     public GameStart() {
         setLayout(null);
-        setBounds(100, 100, 1600, 900);
+        setBounds(0, 0, 1550, 900);
         setUndecorated(true);
         setBackground(new Color(0, 0, 0, 0));
 

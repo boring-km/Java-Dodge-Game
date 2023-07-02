@@ -59,7 +59,7 @@ public class GameScore extends JFrame{
 		scoreback = new JPanel();
 
 		setLayout(null);
-		setBounds(100,100,1600,900);		// 프레임 사이즈
+		setBounds(0,100,1600,900);		// 프레임 사이즈
 
 		BigScore = new ImageIcon("files/Scores.png");
 		Lines = new ImageIcon("files/2Lines.png");

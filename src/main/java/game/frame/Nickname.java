@@ -26,7 +26,7 @@ public class Nickname extends JFrame implements KeyListener{
 	public Nickname() {
 		
 		setLayout(null);
-		setBounds(550, 650, 500, 60);			
+		setBounds(450, 650, 500, 60);
 		setAlwaysOnTop(true);
 		background.setSize(500, 60);
 		background.setBackground(Color.BLACK);

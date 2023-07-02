@@ -12,7 +12,7 @@ public class Back extends JFrame {
 	public Back() {
 
 		setLayout(null);
-		setBounds(100,100,1800,850);
+		setBounds(0,100,1800,850);
 
 		JPanel background = new JPanel();
 		background.setBackground(Color.BLACK);
